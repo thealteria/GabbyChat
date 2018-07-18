@@ -1,4 +1,4 @@
-package com.thealteria.gabbychat;
+package Fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.thealteria.gabbychat.R;
 
 public class FriendsFragment extends Fragment {
 

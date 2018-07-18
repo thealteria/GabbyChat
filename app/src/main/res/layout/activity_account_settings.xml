@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccountSettingsActivity"
+    tools:context=".AccountSettings.AccountSettingsActivity"
     android:background="@color/colorPrimary">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -14,6 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
+        android:onClick="changeImage"
         android:src="@drawable/boy" />
 
     <TextView
@@ -57,12 +58,15 @@
         style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="changeStatus"
         android:layout_below="@+id/profilepicbtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="-116dp"
         android:text="Change status"
         android:textColor="@color/colorPrimary"
-        tools:backgroundTint="#ffffff" />
+        tools:backgroundTint="#ffff" />
 
 
 

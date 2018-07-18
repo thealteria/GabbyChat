@@ -1,10 +1,14 @@
-package com.thealteria.gabbychat;
+package com.thealteria.gabbychat.Welcome;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.thealteria.gabbychat.Login.LoginActivity;
+import com.thealteria.gabbychat.R;
+import com.thealteria.gabbychat.Register.RegisterActivity;
 
 public class StartActivity extends AppCompatActivity {
 

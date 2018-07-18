@@ -1,16 +1,17 @@
-package com.thealteria.gabbychat;
+package com.thealteria.gabbychat.Utils;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import Fragments.ChatFragment;
+import Fragments.FriendsFragment;
+import Fragments.RequestFragment;
 
 public class SectionsPageAdapter extends FragmentPagerAdapter {
 
 
-    SectionsPageAdapter(FragmentManager fm) {
+    public SectionsPageAdapter(FragmentManager fm) {
         super(fm);
     }
 

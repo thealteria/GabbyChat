@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.thealteria.gabbychat.AccountSettings.AccountSettingsActivity;
+import com.thealteria.gabbychat.Utils.SectionsPageAdapter;
+import com.thealteria.gabbychat.Welcome.StartActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -102,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.accsettings) {
             Intent intent = new Intent(MainActivity.this, AccountSettingsActivity.class);
+            startActivity(intent);
+        }
+
+        if (item.getItemId() == R.id.all_users) {
+            Intent intent = new Intent(MainActivity.this, UsersActivity.class);
             startActivity(intent);
         }
 
