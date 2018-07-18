@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "462373857724",
+    "firebase_url": "https://gabbychat-3f181.firebaseio.com",
+    "project_id": "gabbychat-3f181",
+    "storage_bucket": "gabbychat-3f181.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462373857724:android:c788bc191213a9e5",
+        "android_client_info": {
+          "package_name": "com.thealteria.gabbychat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462373857724-5e1fqp9f0823glvr5t1gam4nnq7h4iic.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thealteria.gabbychat",
+            "certificate_hash": "9e3f859c4f5ce45622178a53da2786910521d5cf"
+          }
+        },
+        {
+          "client_id": "462373857724-k05242cqrf04tl5g3jbeoo6e7tldnl1g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQUsGXg1irw8t6-JDrQYo38LHaoxgvAkk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462373857724-k05242cqrf04tl5g3jbeoo6e7tldnl1g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

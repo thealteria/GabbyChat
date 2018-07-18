@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">GabbyChat</string>
+    <string name="need_a_new_account">Need a New Account?</string>
+    <string name="create_account">Create Account</string>
+    <string name="email">Email</string>
+    <string name="already_have_account">Already have account?</string>
+    <string name="login">LOGIN</string>
+    <string name="enter_code">Enter code</string>
+    <string name="verify">Verify</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment 2</string>
+    <string name="show_password">Show Password</string>
+    <string name="confirm_password">Confirm Password</string>
+</resources>

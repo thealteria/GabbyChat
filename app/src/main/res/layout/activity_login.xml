@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LoginActivity">
+
+    <include layout="@layout/app_bar_layout" android:id="@+id/appbar"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="Login to your Account"
+        android:layout_marginTop="20sp"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16sp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/logemail"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:background="@drawable/etstyle"
+            android:hint="@string/email"
+            android:digits=".-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@"
+            android:inputType="textEmailAddress|textWebEmailAddress"
+            android:maxLines="1"
+            android:layout_marginTop="20sp"
+            android:paddingStart="8sp"
+            android:singleLine="true"
+            tools:ignore="RtlSymmetry" />
+
+        <EditText
+            android:id="@+id/logpassword"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/etstyle"
+            android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:paddingStart="8sp"
+            android:singleLine="true"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_password"
+            android:layout_marginTop="10dp"
+            android:id="@+id/rshowPass"/>
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="right"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="30sp"
+            android:clickable="true"
+            android:onClick="loginBtn"
+            android:text="@string/login"
+            android:textColor="#fff"
+            style="@style/Widget.AppCompat.Button.Colored"
+            tools:backgroundTint="@color/colorPrimary"
+            android:focusable="true"
+            tools:ignore="RtlHardcoded" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom|center_horizontal">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resend verification email"
+            android:layout_marginTop="20sp"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
