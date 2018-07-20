@@ -1,7 +1,8 @@
-package com.thealteria.gabbychat.AccountSettings;
+package com.thealteria.gabbychat.Account;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +30,13 @@ import com.squareup.picasso.Picasso;
 import com.thealteria.gabbychat.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class AccountSettingsActivity extends AppCompatActivity {
 
@@ -173,23 +180,67 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                 Uri resultUri = result.getUri();
 
+                final File thumb_filepath = new File(resultUri.getPath());
+                final byte[] thumb_byte;
+
+
+                Bitmap thumb_bitmap = null;
+                try {
+                    thumb_bitmap = new Compressor(this)
+                            .setMaxHeight(200)
+                            .setMaxWidth(200)
+                            .setQuality(75)
+                            .compressToBitmap(thumb_filepath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    thumb_byte = baos.toByteArray();
+
+
+
                 StorageReference filepath = imageStorage.child("profile_images").child(uid + ".jpg");
+                final StorageReference thumb_filePath = imageStorage.child("profile_images").child("thumb_image").child(uid + "jpg");
+
                 filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful()) {
 
-                            String download_url = task.getResult().getDownloadUrl().toString();
-                            reference.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            final String download_url = task.getResult().getDownloadUrl().toString();
+                            UploadTask uploadTask = thumb_filePath.putBytes(thumb_byte);
+                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                                    final String thumb_download_url = task.getResult().getDownloadUrl().toString();
 
                                     if(task.isSuccessful()) {
-                                        Toast.makeText(getApplicationContext(), "Profile Pic changed", Toast.LENGTH_SHORT).show();
+                                        Map updateHashMap = new HashMap();
+                                        updateHashMap.put("image", download_url);
+                                        updateHashMap.put("thumb_image", thumb_download_url);
+
+                                        reference.updateChildren(updateHashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+
+                                                if(task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Profile Pic changed", Toast.LENGTH_SHORT).show();
+                                                    progressDialog.dismiss();
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    else {
+                                        Toast.makeText(getApplicationContext(), "Error in uploading thumbnail", Toast.LENGTH_SHORT).show();
                                         progressDialog.dismiss();
                                     }
                                 }
                             });
+
                         }
 
                         else {

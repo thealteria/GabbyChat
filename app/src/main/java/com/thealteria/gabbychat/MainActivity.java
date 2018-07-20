@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.thealteria.gabbychat.AccountSettings.AccountSettingsActivity;
+import com.thealteria.gabbychat.Account.AccountSettingsActivity;
 import com.thealteria.gabbychat.Utils.SectionsPageAdapter;
 import com.thealteria.gabbychat.Welcome.StartActivity;
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccountSettings.AccountSettingsActivity"
+    tools:context=".Account.AccountSettingsActivity"
     android:background="@color/colorPrimary">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -14,8 +14,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:onClick="changeImage"
         android:src="@drawable/boy" />
+
+    
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,6 +50,7 @@
         android:layout_marginBottom="116dp"
         android:clickable="true"
         android:focusable="true"
+        android:onClick="changeImage"
         android:text="Change image"
         android:textColor="#fff"
         tools:backgroundTint="@color/colorAccent" />

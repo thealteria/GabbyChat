@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import Fragments.ChatFragment;
-import Fragments.FriendsFragment;
-import Fragments.RequestFragment;
+import com.thealteria.gabbychat.Fragments.ChatFragment;
+import com.thealteria.gabbychat.Fragments.FriendsFragment;
+import com.thealteria.gabbychat.Fragments.RequestFragment;
 
 public class SectionsPageAdapter extends FragmentPagerAdapter {
 

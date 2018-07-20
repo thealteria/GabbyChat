@@ -1,4 +1,4 @@
-package Fragments;
+package com.thealteria.gabbychat.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 
 import com.thealteria.gabbychat.R;
 
-public class RequestFragment extends Fragment {
+public class ChatFragment extends Fragment {
 
 
-    public RequestFragment() {
+    public ChatFragment() {
         // Required empty public constructor
     }
 
@@ -29,7 +29,7 @@ public class RequestFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_request, container, false);
+        return inflater.inflate(R.layout.fragment_chat, container, false);
     }
 
 

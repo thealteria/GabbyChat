@@ -3,6 +3,7 @@
     package="com.thealteria.gabbychat">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -26,14 +27,17 @@
         <activity
             android:name=".Register.RegisterActivity"
             android:parentActivityName=".Welcome.StartActivity" />
-        <activity android:name=".Login.LoginActivity"
-            android:parentActivityName=".Welcome.StartActivity"/>
-        <activity android:name=".AccountSettings.AccountSettingsActivity" />
+        <activity
+            android:name=".Login.LoginActivity"
+            android:parentActivityName=".Welcome.StartActivity" />
+        <activity android:name=".Account.AccountSettingsActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".UsersActivity"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".UsersActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".Account.ProfileActivity"></activity>
     </application>
 
 </manifest>
