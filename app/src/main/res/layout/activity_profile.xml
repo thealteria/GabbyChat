@@ -1,9 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Account.ProfileActivity">
+    tools:context=".Account.ProfileActivity"
+    android:background="@color/brown">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/profilePic"
+        android:src="@drawable/boy"
+        android:layout_marginTop="1dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"/>
+
+
+    <TextView
+        android:id="@+id/displayName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="227dp"
+        android:text="Display Name"
+        android:textColor="#ffff"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/displayStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="272dp"
+        android:text="Using Gabby chat!"
+        android:textColor="#ffff"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="165dp"
+        android:text="Total friends"
+        android:textColor="#ffff"
+        android:textSize="14sp" />
+
+
+    <Button
+        android:id="@+id/sendRequest"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="111dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="sendRequest"
+        android:text="Send Friend request"
+        android:textColor="#fff"
+        tools:backgroundTint="@color/colorAccent" />
+
+    <Button
+        android:id="@+id/cancleRequest"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="cancelRequest"
+        android:text="Cancel Friend request"
+        android:textColor="#fff"
+        tools:backgroundTint="@color/colorAccent" />
+
+
+
+</RelativeLayout>

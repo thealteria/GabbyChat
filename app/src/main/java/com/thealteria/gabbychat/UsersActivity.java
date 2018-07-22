@@ -1,6 +1,9 @@
 package com.thealteria.gabbychat;
 
+import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,12 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import com.thealteria.gabbychat.Account.ProfileActivity;
 import com.thealteria.gabbychat.Utils.Users;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -26,6 +31,9 @@ public class UsersActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private RecyclerView recyclerView;
     private DatabaseReference mUserDatabase;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private FirebaseRecyclerAdapter<Users, UsersViewHolder> firebaseRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +41,37 @@ public class UsersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_users);
 
         mToolbar = findViewById(R.id.user_appbar);
+        swipeRefreshLayout = findViewById(R.id.pullToRefresh);
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("All Users");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshContent();
+                //swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
-
-
 
         recyclerView = findViewById(R.id.users_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(UsersActivity.this));
 
+
+    }
+
+    private void refreshContent(){
+
+        new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }, 3000);
 
     }
 
@@ -57,13 +84,26 @@ public class UsersActivity extends AppCompatActivity {
                         .setQuery(mUserDatabase, Users.class)
                         .build();
 
-        FirebaseRecyclerAdapter<Users, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, UsersViewHolder>(options) {
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, UsersViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull UsersViewHolder holder, int position, @NonNull Users users) {
 
                 holder.setName(users.getName());
                 holder.setStatus(users.getStatus());
                 holder.setImage(users.getImage());
+
+                final String uid = getRef(position).getKey();
+
+                holder.view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent profile_intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                        profile_intent.putExtra("user_id", uid);
+                        startActivity(profile_intent);
+                        //Toast.makeText(getApplicationContext(), uid, Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
             @NonNull
