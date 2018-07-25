@@ -20,6 +20,8 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.thealteria.gabbychat.Account.ProfileActivity;
 import com.thealteria.gabbychat.Utils.Users;
@@ -42,6 +44,8 @@ public class UsersActivity extends AppCompatActivity {
 
         mToolbar = findViewById(R.id.user_appbar);
         swipeRefreshLayout = findViewById(R.id.pullToRefresh);
+
+        //mUserDatabase.keepSynced(true);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("All Users");
@@ -151,11 +155,25 @@ public class UsersActivity extends AppCompatActivity {
 
         }
 
-        public void setImage(String thumb_image) {
+        public void setImage(final String thumb_image) {
 
-            CircleImageView circleImageView = view.findViewById(R.id.userImage);
-            Picasso.get().load(thumb_image).placeholder(R.drawable.boy).error(R.drawable.boy).into(circleImageView);
+            final CircleImageView circleImageView = view.findViewById(R.id.userImage);
+            //Picasso.get().load(thumb_image).placeholder(R.drawable.boy).error(R.drawable.boy).into(circleImageView);
 
+            Picasso.get().load(thumb_image).networkPolicy(NetworkPolicy.OFFLINE)
+                    .placeholder(R.drawable.boy).error(R.drawable.boy).into(circleImageView, new Callback() {
+                @Override
+                public void onSuccess() {
+
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                    Picasso.get().load(thumb_image).placeholder(R.drawable.boy).error(R.drawable.boy).into(circleImageView);
+                }
+            });
         }
 
 

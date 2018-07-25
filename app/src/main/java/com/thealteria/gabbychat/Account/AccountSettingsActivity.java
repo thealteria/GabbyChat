@@ -26,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.thealteria.gabbychat.R;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -44,7 +46,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
 
     private CircleImageView mImage;
-    private TextView mName, mStatus;
+    private TextView mName, mStatus, mEmail;
     private Button changeStatus;
 
     private ProgressDialog progressDialog;
@@ -61,11 +63,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
         mImage = findViewById(R.id.profilepic);
         mName = findViewById(R.id.displayname);
         mStatus = findViewById(R.id.statustext);
+        mEmail = findViewById(R.id.emailText);
         changeStatus = findViewById(R.id.statusbtn);
 
         imageStorage = FirebaseStorage.getInstance().getReference();
-
-
 
         setCurrentUser();
 
@@ -75,15 +76,32 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 String name = dataSnapshot.child("name").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
+                final String image = dataSnapshot.child("image").getValue().toString();
                 String status = dataSnapshot.child("status").getValue().toString();
+                String email = dataSnapshot.child("email").getValue().toString();
                 String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                //get the image into ImageView
-                Picasso.get().load(image).placeholder(R.drawable.boy).error(R.drawable.boy).into(mImage);
+                //Picasso.get().load(image).placeholder(R.drawable.boy).error(R.drawable.boy).into(mImage);
+
+                Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE)
+                        .placeholder(R.drawable.boy).error(R.drawable.boy).into(mImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                        Picasso.get().load(image).placeholder(R.drawable.boy).error(R.drawable.boy).into(mImage);
+                    }
+                });
 
                 mName.setText(name);
                 mStatus.setText(status);
+                mEmail.setText(email);
 
             }
 
@@ -95,13 +113,47 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     }
 
+    public void changeName(View view) {
+
+        String getName = mName.getText().toString();
+
+        new MaterialDialog.Builder(this)
+                .title("Change Name")
+                .inputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
+                .positiveText("Change")
+                .negativeText("Cancel")
+                .inputRangeRes(1, 20, R.color.red)
+                .iconRes(R.drawable.ic_statuschange)
+                .input("Name..", getName, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                        String name = input.toString();
+
+                        reference.child("name").setValue(name).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                if(task.isSuccessful()) {
+                                    Toast.makeText(getApplicationContext(), "Name changed!", Toast.LENGTH_LONG).show();
+                                }
+
+                                else {
+                                    Toast.makeText(getApplicationContext(), "Error occurs while saving the Name!", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+
+                    }
+                }).show();
+    }
+
     public void changeStatus(View view) {
 
         String getStatus = mStatus.getText().toString();
 
         new MaterialDialog.Builder(this)
-                .title("Lol")
-                .content("Content bc")
+                .title("Change Status")
                 .inputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
                 .positiveText("Change")
                 .negativeText("Cancel")
@@ -139,6 +191,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         String uid = currentUser.getUid();
 
         reference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+        reference.keepSynced(true);
     }
 
     public void changeImage(View view) {

@@ -13,13 +13,19 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.thealteria.gabbychat.MainActivity;
 import com.thealteria.gabbychat.R;
 
@@ -31,9 +37,11 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     private Toolbar mtoolbar;
     private CheckBox rshow;
+    private TextView forgeotPass;
 
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
+    private DatabaseReference userDatabase;
 
 
     @Override
@@ -45,6 +53,9 @@ public class LoginActivity extends AppCompatActivity {
         lpass = findViewById(R.id.logpassword);
         loginBtn = findViewById(R.id.loginButton);
         rshow = findViewById(R.id.rshowPass);
+        forgeotPass = findViewById(R.id.forgotPassword);
+
+        userDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
         mtoolbar = findViewById(R.id.appbar);
         setSupportActionBar(mtoolbar);
@@ -102,11 +113,23 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (task.isSuccessful()) {
 
-                        verifyEmail();
+                        String currentUser = mAuth.getCurrentUser().getUid();
+                        String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        userDatabase.child(currentUser).child("device_token").setValue(deviceToken)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                        verifyEmail();
+
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+                                    }
+                                });
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -136,10 +159,48 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             else {
-                Toast.makeText(getApplicationContext(), "Check your email for verification", Toast.LENGTH_SHORT).show();
-                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(getApplicationContext(),
+                        "You can't login without verifying your email. Please Check your email for verification",
+                        Toast.LENGTH_SHORT).show();
+
                 finish();
             }
         }
+    }
+
+    public void forgotPassword(View view) {
+
+
+        new MaterialDialog.Builder(LoginActivity.this)
+                .title("Reset Password")
+                .inputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+                .positiveText("Change")
+                .negativeText("Cancel")
+                .inputRangeRes(5, 30, R.color.red)
+                .input("Enter your Email..", null, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                        String email = input.toString();
+
+                        mAuth.sendPasswordResetEmail(email)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                        if (task.isSuccessful())
+                                                Toast.makeText(getApplicationContext(),
+                                                        "Check email to reset your password!", Toast.LENGTH_SHORT).show();
+                                            else
+                                                Toast.makeText(getApplicationContext(),
+                                                        "Fail to send reset password email!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
+                    }
+                }).show();
+
+
     }
 }

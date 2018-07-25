@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.thealteria.gabbychat.Login.LoginActivity;
 import com.thealteria.gabbychat.R;
 
@@ -95,7 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-    private void registerUser(final String regname, String regemail, String regpass, String regcnfrmpass) {
+    private void registerUser(final String regname, final String regemail, String regpass, String regcnfrmpass) {
 
         if (regemail.equals("") || regpass.equals("") || regname.equals("") || regcnfrmpass.equals("")) {
             Toast.makeText(getApplicationContext(), "Please Enter your Details", Toast.LENGTH_SHORT).show();
@@ -128,11 +129,15 @@ public class RegisterActivity extends AppCompatActivity {
 
                                         database = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
+                                        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
                                         HashMap<String, String> userMap = new HashMap<>();
                                         userMap.put("name", regname);
+                                        userMap.put("email", regemail);
                                         userMap.put("status", "Using Gabby chat!");
                                         userMap.put("image", "default");
                                         userMap.put("thumb_image", "default");
+                                        userMap.put("device_token", deviceToken);
 
                                         database.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override

@@ -7,6 +7,7 @@
     tools:context=".Account.ProfileActivity"
     android:background="@color/brown">
 
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -67,17 +68,17 @@
         tools:backgroundTint="@color/colorAccent" />
 
     <Button
-        android:id="@+id/cancleRequest"
+        android:id="@+id/declineRequest"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:onClick="declineRequest"
         android:layout_marginBottom="60dp"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="cancelRequest"
-        android:text="Cancel Friend request"
+        android:text="Decline Friend request"
         android:textColor="#fff"
         tools:backgroundTint="@color/colorAccent" />
 

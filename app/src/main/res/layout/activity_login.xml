@@ -57,12 +57,28 @@
             android:paddingStart="8sp"
             android:singleLine="true"/>
 
-        <CheckBox
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/show_password"
-            android:layout_marginTop="10dp"
-            android:id="@+id/rshowPass"/>
+            android:layout_marginTop="10dp">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/show_password"
+                android:id="@+id/rshowPass"/>
+
+            <TextView
+                android:id="@+id/forgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:onClick="forgotPassword"
+                android:text="Forget Password"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
 
         <Button
             android:id="@+id/login"
@@ -80,24 +96,6 @@
             tools:backgroundTint="@color/colorPrimary"
             android:focusable="true"
             tools:ignore="RtlHardcoded" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="bottom|center_horizontal">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Resend verification email"
-            android:layout_marginTop="20sp"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            android:visibility="invisible"/>
-
     </LinearLayout>
 
 
