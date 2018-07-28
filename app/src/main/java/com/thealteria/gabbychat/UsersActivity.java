@@ -18,8 +18,12 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -32,10 +36,14 @@ public class UsersActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private RecyclerView recyclerView;
+    private FirebaseAuth mAuth;
     private DatabaseReference mUserDatabase;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+
+
     private FirebaseRecyclerAdapter<Users, UsersViewHolder> firebaseRecyclerAdapter;
+    private DatabaseReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +74,9 @@ public class UsersActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(UsersActivity.this));
 
+        mAuth = FirebaseAuth.getInstance();
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
 
     }
 
@@ -82,6 +93,8 @@ public class UsersActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        //userRef.child("online").setValue(true);
 
         FirebaseRecyclerOptions<Users> options =
                 new FirebaseRecyclerOptions.Builder<Users>()
@@ -116,7 +129,6 @@ public class UsersActivity extends AppCompatActivity {
                 View view = LayoutInflater.from(parent.getContext()).
                         inflate(R.layout.users_single_layout, parent, false);
 
-
                 return new UsersViewHolder(view);
             }
 
@@ -135,7 +147,7 @@ public class UsersActivity extends AppCompatActivity {
 
         View view;
 
-        public UsersViewHolder(View itemView) {
+        UsersViewHolder(View itemView) {
             super(itemView);
 
             view = itemView;
@@ -143,7 +155,7 @@ public class UsersActivity extends AppCompatActivity {
 
         public void setName(String name) {
 
-            TextView mName = view.findViewById(R.id.userName);
+            TextView mName = view.findViewById(R.id.singleName);
             mName.setText(name);
 
         }
@@ -165,7 +177,6 @@ public class UsersActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
 
-
                 }
 
                 @Override
@@ -175,7 +186,6 @@ public class UsersActivity extends AppCompatActivity {
                 }
             });
         }
-
 
     }
 }

@@ -42,7 +42,7 @@ import id.zelory.compressor.Compressor;
 
 public class AccountSettingsActivity extends AppCompatActivity {
 
-    private DatabaseReference reference;
+    private DatabaseReference reference, userRef;
     private FirebaseUser currentUser;
 
     private CircleImageView mImage;
@@ -54,6 +54,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private static final int GALLERY_PIC = 1;
 
     private StorageReference imageStorage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         setCurrentUser();
 
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -81,7 +81,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 String email = dataSnapshot.child("email").getValue().toString();
                 String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
-               //get the image into ImageView
+                //get the image into ImageView
                 //Picasso.get().load(image).placeholder(R.drawable.boy).error(R.drawable.boy).into(mImage);
 
                 Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE)
@@ -134,12 +134,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
 
-                                if(task.isSuccessful()) {
+                                if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Name changed!", Toast.LENGTH_LONG).show();
-                                }
-
-                                else {
-                                    Toast.makeText(getApplicationContext(), "Error occurs while saving the Name!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Error occurs while saving the Name!",
+                                            Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -169,12 +168,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
 
-                                if(task.isSuccessful()) {
+                                if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Status changed!", Toast.LENGTH_LONG).show();
-                                }
-
-                                else {
-                                    Toast.makeText(getApplicationContext(), "Error occurs while saving the status!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Error occurs while saving the status!",
+                                            Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -249,18 +247,18 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 }
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    thumb_byte = baos.toByteArray();
-
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                thumb_byte = baos.toByteArray();
 
 
                 StorageReference filepath = imageStorage.child("profile_images").child(uid + ".jpg");
-                final StorageReference thumb_filePath = imageStorage.child("profile_images").child("thumb_image").child(uid + "jpg");
+                final StorageReference thumb_filePath = imageStorage.child("profile_images")
+                        .child("thumb_image").child(uid + ".jpg");
 
                 filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
 
                             final String download_url = task.getResult().getDownloadUrl().toString();
                             UploadTask uploadTask = thumb_filePath.putBytes(thumb_byte);
@@ -270,34 +268,34 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                                     final String thumb_download_url = task.getResult().getDownloadUrl().toString();
 
-                                    if(task.isSuccessful()) {
+                                    if (task.isSuccessful()) {
                                         Map updateHashMap = new HashMap();
                                         updateHashMap.put("image", download_url);
                                         updateHashMap.put("thumb_image", thumb_download_url);
 
-                                        reference.updateChildren(updateHashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        reference.updateChildren(updateHashMap)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
 
-                                                if(task.isSuccessful()) {
-                                                    Toast.makeText(getApplicationContext(), "Profile Pic changed", Toast.LENGTH_SHORT).show();
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Profile Pic changed",
+                                                            Toast.LENGTH_SHORT).show();
                                                     progressDialog.dismiss();
                                                 }
                                             }
                                         });
-                                    }
-
-                                    else {
-                                        Toast.makeText(getApplicationContext(), "Error in uploading thumbnail", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Error in uploading thumbnail",
+                                                Toast.LENGTH_SHORT).show();
                                         progressDialog.dismiss();
                                     }
                                 }
                             });
 
-                        }
-
-                        else {
-                            Toast.makeText(getApplicationContext(), "Error while changing image", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error while changing image",
+                                    Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }
                     }
@@ -308,4 +306,17 @@ public class AccountSettingsActivity extends AppCompatActivity {
             }
         }
     }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//
+//        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        String uid = currentUser.getUid();
+//
+//        reference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+//
+//        reference.child("online").setValue("true");
+//    }
 }

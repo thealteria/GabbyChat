@@ -8,12 +8,19 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.thealteria.gabbychat.Account.AccountSettingsActivity;
 import com.thealteria.gabbychat.Utils.SectionsPageAdapter;
 import com.thealteria.gabbychat.Welcome.StartActivity;
@@ -22,13 +29,15 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private Toolbar mtoolbar;
+    private DatabaseReference userRef, currentUserId;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAuth = FirebaseAuth.getInstance();
+
         mtoolbar = findViewById(R.id.appbar);
         setSupportActionBar(mtoolbar);
         getSupportActionBar().setTitle("Gabby Chat");
@@ -45,16 +54,51 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setText("Chats");
         tabLayout.getTabAt(2).setText("Friends");
 
+
+        currentUserId = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
+            userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        }
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
 
         if (currentUser == null) {
             gotoStart();
+        }
+
+        else {
+            currentUserId.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid()))
+                    {
+                        userRef.child("online").setValue("true");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d("MainActivity", databaseError.getMessage());
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(currentUser != null) {
+
+            userRef.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
 

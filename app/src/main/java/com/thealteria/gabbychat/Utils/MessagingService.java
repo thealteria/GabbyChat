@@ -25,7 +25,9 @@ public class MessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(notiTitle)
                 .setContentText(notiBody)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
 
         Intent intent = new Intent(click_action);
         intent.putExtra( "user_id", from_user_id);

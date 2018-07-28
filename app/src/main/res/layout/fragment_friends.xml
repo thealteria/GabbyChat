@@ -5,10 +5,30 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.FriendsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="You have no friends!"
+            android:textSize="15sp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/noFriends"
+            android:textColor="#000000"
+            android:visibility="visible"/>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="friends" />
+        android:id="@+id/friends_list"
+        android:clickable="true"
+        android:focusable="true">
+    </android.support.v7.widget.RecyclerView>
 
 </FrameLayout>

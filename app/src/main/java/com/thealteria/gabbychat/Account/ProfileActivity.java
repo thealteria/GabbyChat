@@ -48,9 +48,10 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView mProfilePic;
     private Button mSendRequest, mDeclineBtn;
 
-    private DatabaseReference reference;
+    private FirebaseAuth mAuth;
+
     private ProgressDialog progressDialog;
-    private DatabaseReference friendRequestDB, friendDatabase, notificationsDatabase, mRootRef;
+    private DatabaseReference reference, friendRequestDB, friendDatabase, notificationsDatabase, mRootRef, userRef;
 
     private FirebaseUser currentUser;
     private String current_state;
@@ -65,11 +66,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
 
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
         friendRequestDB = FirebaseDatabase.getInstance().getReference().child("Friend_Request");
         friendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
-        notificationsDatabase = FirebaseDatabase.getInstance().getReference().child("notifications");
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        //notificationsDatabase = FirebaseDatabase.getInstance().getReference().child("notifications");
+        mAuth = FirebaseAuth.getInstance();
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         mProfilePic = findViewById(R.id.profilePic);
         mName = findViewById(R.id.displayName);
@@ -201,15 +204,16 @@ public class ProfileActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                    if (databaseError != null) {
+                    if (databaseError == null) {
+
+                        requestState(mSendRequest, "req_sent", "Cancel Friend Request"
+                                , "Friend Request Sent!");
+                        }
+
+                    else {
                         Toast.makeText(getApplicationContext(), " Error occured while sending request!"
-                        , Toast.LENGTH_LONG).show();
-
+                                , Toast.LENGTH_LONG).show();
                     }
-
-                    requestState(mSendRequest, "req_sent", "Cancel Friend Request"
-                            , "Friend Request Sent!");
-
                 }
             });
 
@@ -226,11 +230,14 @@ public class ProfileActivity extends AppCompatActivity {
         // ------------REQ RECEIVED STATE---------------
 
         if (current_state.equals("req_received")) {
-            final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
+            final String currentDate = DateFormat.getDateInstance().format(new Date());
+            final String currentTime = DateFormat.getTimeInstance().format(new Date());
 
             Map friendsMap = new HashMap();
             friendsMap.put("Friends/" + currentUser.getUid() + "/" + uid + "/date", currentDate);
+            friendsMap.put("Friends/" + currentUser.getUid() + "/" + uid + "/time", currentTime);
             friendsMap.put("Friends/" + uid + "/" + currentUser.getUid() + "/date", currentDate);
+            friendsMap.put("Friends/" + uid + "/" + currentUser.getUid() + "/time", currentTime);
 
             friendsMap.put("Friend_Request/" + currentUser.getUid() + "/" + uid, null);
             friendsMap.put("Friend_Request/" + uid + "/" + currentUser.getUid(), null);
@@ -241,7 +248,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                     if (databaseError == null) {
 
-                        requestState(mSendRequest, "friends", "Unfriend this person", null);
+                        requestState(mSendRequest, "friends", "Unfriend this person",
+                                "Friend Request Accepted!");
                         disableDeclineBtn();
                     }
 
@@ -274,6 +282,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    mSendRequest.setEnabled(true);
                     dialog.cancel();
                 }
             });
@@ -361,4 +370,11 @@ public class ProfileActivity extends AppCompatActivity {
         mDeclineBtn.setVisibility(View.INVISIBLE);
         mDeclineBtn.setEnabled(false);
     }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//
+//        userRef.child("online").setValue(true);
+//    }
 }

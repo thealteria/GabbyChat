@@ -2,10 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
     android:paddingTop="15dp"
-    android:paddingBottom="15sp"
-    android:layout_marginStart="10dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
     android:background="?android:attr/selectableItemBackground">
+
+    <ImageView
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="17dp"
+        android:src="@drawable/draw_online"
+        android:id="@+id/onlineStatus"
+        android:visibility="invisible"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="64dp"
@@ -14,7 +25,7 @@
         android:src="@drawable/boy"/>
 
     <TextView
-        android:id="@+id/userName"
+        android:id="@+id/singleName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="84dp"
@@ -27,8 +38,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/userName"
+        android:layout_alignStart="@+id/singleName"
         android:layout_marginTop="33dp"
-        android:text="Default Status.." />
+        android:text="Display status.." />
 
 </RelativeLayout>

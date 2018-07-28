@@ -4,20 +4,20 @@
     package="com.thealteria.gabbychat">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".Utils.GabbyChat"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".Utils.GabbyChat"
         tools:ignore="InnerclassSeparator">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -43,16 +43,22 @@
         <activity android:name=".Account.ProfileActivity">
             <intent-filter>
                 <action android:name="com.thealteria.gabbychat_TARGET_NOTI" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <service android:name=".Utils.MessagingService"
-            tools:ignore="ExportedService,InnerclassSeparator" >
+        <service
+            android:name=".Utils.MessagingService"
+            tools:ignore="ExportedService,InnerclassSeparator">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".Account.ChatActivity"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
