@@ -1,10 +1,8 @@
 package com.thealteria.gabbychat.Fragments;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -31,9 +29,7 @@ import com.squareup.picasso.Picasso;
 import com.thealteria.gabbychat.Account.ChatActivity;
 import com.thealteria.gabbychat.Account.ProfileActivity;
 import com.thealteria.gabbychat.R;
-import com.thealteria.gabbychat.UsersActivity;
-import com.thealteria.gabbychat.Utils.Friends;
-import com.thealteria.gabbychat.Utils.Users;
+import com.thealteria.gabbychat.Model.Friends;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

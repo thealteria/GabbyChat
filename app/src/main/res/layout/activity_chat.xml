@@ -20,6 +20,8 @@
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/chatAppbar"
+            android:layout_above="@id/linearLayout"
             android:id="@+id/messagesList">
 
         </android.support.v7.widget.RecyclerView>
@@ -35,29 +37,28 @@
         android:orientation="horizontal"
         android:weightSum="10">
 
-        <ImageButton
-            android:id="@+id/chat_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="chat_add"
-            android:alpha="0.5"
-            android:background="@android:color/white"
-            android:padding="12.5dp"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
+        <!--<ImageButton-->
+            <!--android:id="@+id/chat_add"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:alpha="0.5"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:padding="12.5dp"-->
+            <!--app:srcCompat="@drawable/ic_add_black_24dp"-->
+            <!--android:contentDescription="Add Image" />-->
 
         <EditText
             android:id="@+id/chat_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="8"
+            android:layout_weight="9.5"
             android:background="@android:color/white"
             android:ems="10"
             android:hint="Enter Message..."
             android:inputType="textPersonName"
             android:paddingBottom="12dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingStart="10dp"
             android:paddingTop="14dp" />
 
         <ImageButton

@@ -1,4 +1,4 @@
-package com.thealteria.gabbychat.Utils;
+package com.thealteria.gabbychat.Model;
 
 public class Messages {
 
@@ -20,11 +20,12 @@ public class Messages {
         this.from = from;
     }
 
-    public Messages(String message, String type, long time, boolean seen) {
+    public Messages(String message, String type, long time, boolean seen, String from) {
         this.message = message;
         this.type = type;
         this.time = time;
         this.seen = seen;
+        this.from = from;
     }
 
     public String getMessage() {

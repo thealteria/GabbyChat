@@ -1,4 +1,4 @@
-package com.thealteria.gabbychat.Utils;
+package com.thealteria.gabbychat.Model;
 
 public class Users {
 

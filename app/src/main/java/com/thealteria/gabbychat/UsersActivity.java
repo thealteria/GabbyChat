@@ -12,23 +12,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.thealteria.gabbychat.Account.ProfileActivity;
-import com.thealteria.gabbychat.Utils.Users;
+import com.thealteria.gabbychat.Model.Users;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,6 +39,7 @@ public class UsersActivity extends AppCompatActivity {
 
     private FirebaseRecyclerAdapter<Users, UsersViewHolder> firebaseRecyclerAdapter;
     private DatabaseReference userRef;
+    private DatabaseReference currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +70,12 @@ public class UsersActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(UsersActivity.this));
 
+        currentUserId = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
-        userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
+        if (mAuth.getCurrentUser() != null) {
+            userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        }
 
     }
 
@@ -93,8 +92,6 @@ public class UsersActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        //userRef.child("online").setValue(true);
 
         FirebaseRecyclerOptions<Users> options =
                 new FirebaseRecyclerOptions.Builder<Users>()
@@ -186,6 +183,14 @@ public class UsersActivity extends AppCompatActivity {
                 }
             });
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        userRef.child("online").setValue("true");
 
     }
 }

@@ -20,7 +20,7 @@ public class GetTimeAgo extends Application {
         long now = System.currentTimeMillis();
         if (time > now || time <= 0) {
 
-            return "online";
+            return "just now";
         }
 
         // TODO: localize
