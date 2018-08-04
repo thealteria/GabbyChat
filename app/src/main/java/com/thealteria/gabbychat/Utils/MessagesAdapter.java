@@ -1,14 +1,12 @@
 package com.thealteria.gabbychat.Utils;
 
-import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,8 +26,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     private List<Messages> mMessageList;
     private DatabaseReference mUserDatabase, userDB;
     private FirebaseAuth mAuth;
-    private LayoutParams layoutparams;
-
 
     public MessagesAdapter(List<Messages> mMessageList) {
 
@@ -49,26 +45,30 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
     class MessageViewHolder extends RecyclerView.ViewHolder {
 
-        private final RelativeLayout messageRelLayout;
-        TextView messageText, timeText;
+        private ImageView messageImageRight, messageImageLeft;
+        private TextView messageTextLeft, timeText, messageTextRight;
+        private LinearLayout leftLayout, rightLayout;
+
+        private String messageTye;
         //CircleImageView profileImage;
-        ImageView messageImage;
 
         MessageViewHolder(View view) {
             super(view);
 
-            messageText = view.findViewById(R.id.messageTextLayout);
-            messageRelLayout = view.findViewById(R.id.messageRelLayout);
-            //profileImage = view.findViewById(R.id.messageProfileLayout);
+            messageTextLeft = view.findViewById(R.id.messageTextLeft);
+            messageTextRight = view.findViewById(R.id.messageTextRight);
+           //profileImage = view.findViewById(R.id.messageProfileLayout);
             //timeText = view.findViewById(R.id.messageTime);
-            messageImage = view.findViewById(R.id.messageImage);
-            layoutparams = (LayoutParams)messageRelLayout.getLayoutParams();
+            messageImageRight = view.findViewById(R.id.messageImageRight);
+            messageImageLeft = view.findViewById(R.id.messageImageLeft);
+            leftLayout = view.findViewById(R.id.leftLayout);
+            rightLayout = view.findViewById(R.id.rightLayout);
 
         }
     }
 
     @Override
-    public void onBindViewHolder(final MessageViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final MessageViewHolder viewHolder, int i) {
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -110,53 +110,108 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 //            }
 //        });
 
-        if (messageTye.equals("text")) {
-            viewHolder.messageImage.setVisibility(View.INVISIBLE);
-            viewHolder.messageText.setText(messages.getMessage());
-        }
-
-        else if (messageTye.equals("image")) {
-            viewHolder.messageText.setVisibility(View.INVISIBLE);
-            Picasso.get().load(messages.getMessage()).networkPolicy(NetworkPolicy.OFFLINE)
-                    .resize(500, 500)
-                    .centerCrop()
-                    .into(viewHolder.messageImage, new Callback() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    Picasso.get().load(messages.getMessage()).resize(500, 500)
-                            .centerCrop().into(viewHolder.messageImage);
-                }
-            });
-        }
 
         if (from_user.equals(currentUser)) {
-            
-            //layoutparams.setMargins(0, 5, 10, 0);
-            viewHolder.messageText.setBackgroundResource(R.drawable.message_text_white);
-            viewHolder.messageText.setTextColor(Color.BLACK);
-            viewHolder.messageRelLayout.setGravity(Gravity.END);
+            viewHolder.messageTextLeft.setVisibility(View.GONE);
+            viewHolder.messageImageLeft.setVisibility(View.GONE);
+            viewHolder.leftLayout.setVisibility(View.GONE);
+            viewHolder.rightLayout.setVisibility(View.VISIBLE);
 
+            if(messageTye.equals("text")) {
+                viewHolder.messageTextRight.setText(messages.getMessage());
+                viewHolder.messageTextRight.setVisibility(View.VISIBLE);
+                viewHolder.messageImageRight.setVisibility(View.GONE);
+            }
+
+            else if (messageTye.equals("image")) {
+                viewHolder.messageTextRight.setVisibility(View.GONE);
+                viewHolder.messageImageRight.setVisibility(View.VISIBLE);
+                Picasso.get().load(messages.getMessage()).networkPolicy(NetworkPolicy.OFFLINE)
+                        .resize(400, 400)
+                        .centerCrop()
+                        .into(viewHolder.messageImageRight, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                Picasso.get().load(messages.getMessage()).resize(400, 400)
+                                        .centerCrop().into(viewHolder.messageImageRight);
+                            }
+                        });
+            }
         }
         else {
-            viewHolder.messageText.setBackgroundResource(R.drawable.message_text_back);
-            viewHolder.messageText.setTextColor(Color.WHITE);
-            viewHolder.messageRelLayout.setGravity(Gravity.START);
+            viewHolder.messageTextRight.setVisibility(View.GONE);
+            viewHolder.messageImageRight.setVisibility(View.GONE);
+            viewHolder.rightLayout.setVisibility(View.GONE);
+            viewHolder.leftLayout.setVisibility(View.VISIBLE);
 
+            if (messageTye.equals("text")) {
+                viewHolder.messageTextLeft.setText(messages.getMessage());
+                //viewHolder.messageImageLeft.setVisibility(View.GONE);
+            }
+
+            else if (messageTye.equals("image")) {
+                viewHolder.messageTextLeft.setVisibility(View.GONE);
+                viewHolder.messageImageLeft.setVisibility(View.VISIBLE);
+                Picasso.get().load(messages.getMessage()).networkPolicy(NetworkPolicy.OFFLINE)
+                        .resize(400, 400)
+                        .centerCrop()
+                        .into(viewHolder.messageImageLeft, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                Picasso.get().load(messages.getMessage()).resize(400, 400)
+                                        .centerCrop().into(viewHolder.messageImageLeft);
+                            }
+                        });
+            }
         }
-        viewHolder.messageText.setText(messages.getMessage());
+
     }
 
     @Override
     public int getItemCount() {
         return mMessageList.size();
     }
-}
 
+    /* public void setMessage(TextView goneText, TextView showText, final ImageView goneImage, final ImageView showImage) {
+
+        goneText.setVisibility(View.GONE);
+        goneImage.setVisibility(View.GONE);
+
+        if(messageTye.equals("text")) {
+            showText.setText(messages.getMessage());
+            showImage.setVisibility(View.GONE);
+        }
+
+        else if (messageTye.equals("image")) {
+            showText.setVisibility(View.INVISIBLE);
+            Picasso.get().load(messages.getMessage()).networkPolicy(NetworkPolicy.OFFLINE)
+                    .resize(400, 400)
+                    .centerCrop()
+                    .into(showImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get().load(messages.getMessage()).resize(400, 400)
+                                    .centerCrop().into(showImage);
+                        }
+                    });
+        }
+    } */
+}
 
 
 

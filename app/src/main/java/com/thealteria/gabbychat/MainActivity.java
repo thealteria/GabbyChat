@@ -93,11 +93,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onResume() {
+        super.onResume();
 
         if(currentUser != null) {
+            userRef.child("online").setValue(ServerValue.TIMESTAMP);
+        }
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(currentUser != null) {
             userRef.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }

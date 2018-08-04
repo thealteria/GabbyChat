@@ -72,7 +72,7 @@ public class ChatActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayout;
     private MessagesAdapter adapter;
 
-    private SwipeRefreshLayout refreshLayout;
+    //private SwipeRefreshLayout refreshLayout;
 
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int currentPage = 1, itemPos = 0;
@@ -120,7 +120,7 @@ public class ChatActivity extends AppCompatActivity {
         titleView = findViewById(R.id.chatName);
         lastSeen = findViewById(R.id.chatLastSeen);
         profileImage = findViewById(R.id.chatImage);
-        //chatAddBtn = findViewById(R.id.chat_add);
+        chatAddBtn = findViewById(R.id.chat_add);
         chatSendBtn = findViewById(R.id.chat_send);
         chatMsg = findViewById(R.id.chat_message);
 
@@ -128,7 +128,7 @@ public class ChatActivity extends AppCompatActivity {
         imageStorage=  FirebaseStorage.getInstance().getReference();
 
         messagesList = findViewById(R.id.messagesList);
-        refreshLayout = findViewById(R.id.messageSwipe);
+        //refreshLayout = findViewById(R.id.messageSwipe);
 
         linearLayout = new LinearLayoutManager(this);
         messagesList.setHasFixedSize(true);
@@ -208,7 +208,8 @@ public class ChatActivity extends AppCompatActivity {
                     lastSeen.setText("Online");
                 }
                 else {
-                    typingRef = FirebaseDatabase.getInstance().getReference().child("Chat").child(currentUserId).child(chatUser);
+                    typingRef = FirebaseDatabase.getInstance().getReference().child("Chat").
+                            child(currentUserId).child(chatUser);
                     typingRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -273,26 +274,26 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-//        chatAddBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent gallery = new Intent();
-//        gallery.setType("image/*");
-//        gallery.setAction(Intent.ACTION_GET_CONTENT);
-//
-//        startActivityForResult(Intent.createChooser(gallery, "Select Image"), GALLERY_PICK);
-//            }
-//        });
-
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        chatAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onRefresh() {
-                currentPage++;
-                itemPos = 0;
-                loadMoreMessages();
+            public void onClick(View v) {
+                Intent gallery = new Intent();
+        gallery.setType("image/*");
+        gallery.setAction(Intent.ACTION_GET_CONTENT);
 
+        startActivityForResult(Intent.createChooser(gallery, "Select Image"), GALLERY_PICK);
             }
         });
+
+//        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                currentPage++;
+//                itemPos = 0;
+//                loadMoreMessages();
+//
+//            }
+//        });
     }
 
     @Override
@@ -300,13 +301,13 @@ public class ChatActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GALLERY_PICK && resultCode == RESULT_OK && data != null) {
-//
+            
             progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Sending image");
             progressDialog.setMessage("Please wait while sending the image..!!");
             progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.show();
             Uri imageUri = data.getData();
+            progressDialog.show();
             CropImage.activity(imageUri).start(this);
         }
 
@@ -355,123 +356,75 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-        private void loadMoreMessages() {
-
-        messageRef = rootRef.child("messages").child(currentUserId).child(chatUser);
-        messageQuery = messageRef.orderByKey().endAt(lastKey).limitToLast(10);
-
-        messageQuery.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Messages messages = dataSnapshot.getValue(Messages.class);
-
-                String messageKey = dataSnapshot.getKey();
-
-                if (!prevKey.equals(messageKey)) {
-                    mMessagesList.add(itemPos++, messages);
-                }
-
-                else {
-                    prevKey = lastKey;
-                }
-
-                if(itemPos == 1) {
-
-                    lastKey = messageKey;
-                }
-
-
-                Log.d("TOTAL_KEYS", "lastKey: "+ lastKey + "| Prevkey: " + prevKey + "| MsgKey: " + messages);
-
-                adapter.notifyDataSetChanged();
-                refreshLayout.setRefreshing(false);
-
-                linearLayout.scrollToPositionWithOffset(10, 0);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
+//        private void loadMoreMessages() {
+//
+//        messageRef = rootRef.child("messages").child(currentUserId).child(chatUser);
+//        messageQuery = messageRef.orderByKey().endAt(lastKey).limitToLast(10);
+//
+//        messageQuery.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                Messages messages = dataSnapshot.getValue(Messages.class);
+//
+//                String messageKey = dataSnapshot.getKey();
+//
+//                if (!prevKey.equals(messageKey)) {
+//                    mMessagesList.add(itemPos++, messages);
+//                }
+//
+//                else {
+//                    prevKey = lastKey;
+//                }
+//
+//                if(itemPos == 1) {
+//
+//                    lastKey = messageKey;
+//                }
+//
+//
+//                Log.d("TOTAL_KEYS", "lastKey: "+ lastKey + "| Prevkey: " + prevKey + "| MsgKey: " + messages);
+//
+//                adapter.notifyDataSetChanged();
+//                refreshLayout.setRefreshing(false);
+//
+//                linearLayout.scrollToPositionWithOffset(10, 0);
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//
+//    }
 
     private void loadMessages() {
 
-//        rootRef.child("messages").child(currentUserId).child(chatUser)
-//                .addChildEventListener(new ChildEventListener() {
-//                    @Override
-//                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                        Messages messages = dataSnapshot.getValue(Messages.class);
-//                        mMessagesList.add(messages);
-//                        adapter.notifyDataSetChanged();
-//
-//                        messagesList.scrollToPosition(mMessagesList.size() - 1);
-//
-//                    }
-//
-//                    @Override
-//                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//
-//                    }
-//                });
-
-
-        messageRef = rootRef.child("messages").child(currentUserId).child(chatUser);
-        messageQuery = messageRef.limitToLast(currentPage * TOTAL_ITEMS_TO_LOAD);
-
-        messageQuery.addChildEventListener(new ChildEventListener() {
+        rootRef.child("messages").child(currentUserId).child(chatUser)
+                .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                         Messages messages = dataSnapshot.getValue(Messages.class);
-
-                        itemPos++;
-
-                        if(itemPos == 1) {
-                            String messageKey = dataSnapshot.getKey();
-
-                            lastKey = messageKey;
-                            prevKey = messageKey;
-                        }
-
                         mMessagesList.add(messages);
-
                         adapter.notifyDataSetChanged();
+
                         messagesList.scrollToPosition(mMessagesList.size() - 1);
-                        refreshLayout.setRefreshing(false);
 
                     }
 
@@ -495,6 +448,54 @@ public class ChatActivity extends AppCompatActivity {
 
                     }
                 });
+
+
+//        messageRef = rootRef.child("messages").child(currentUserId).child(chatUser);
+//        messageQuery = messageRef.limitToLast(currentPage * TOTAL_ITEMS_TO_LOAD);
+//
+//        messageQuery.addChildEventListener(new ChildEventListener() {
+//                    @Override
+//                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//
+//                        Messages messages = dataSnapshot.getValue(Messages.class);
+//
+//                        itemPos++;
+//
+//                        if(itemPos == 1) {
+//                            String messageKey = dataSnapshot.getKey();
+//
+//                            lastKey = messageKey;
+//                            prevKey = messageKey;
+//                        }
+//
+//                        mMessagesList.add(messages);
+//
+//                        adapter.notifyDataSetChanged();
+//                        messagesList.scrollToPosition(mMessagesList.size() - 1);
+//                        refreshLayout.setRefreshing(false);
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
 
     }
 

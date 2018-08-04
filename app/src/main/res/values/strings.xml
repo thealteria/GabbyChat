@@ -10,6 +10,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment 2</string>
-    <string name="show_password">Show Password</string>
+    <string name="show_password">show password</string>
     <string name="confirm_password">Confirm Password</string>
 </resources>
