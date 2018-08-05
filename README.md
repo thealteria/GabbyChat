@@ -11,7 +11,7 @@ App's Privacy Policy and Terms and Conditions will be updated soon.
 ## Features 
 
 - Messaging
-  - Send and Receive messages with users
+  - Send and Receive messages
   - Send pictures
 - Friends
   - Accept, Decline or Remove Friends
@@ -29,8 +29,11 @@ App's Privacy Policy and Terms and Conditions will be updated soon.
 - Notifications
   - Notification when you have a new message
   - Notification when someone accepts your request
+-Messages
+  - Sending audio, video files and documents
+  - Delete messages from everyone's chat
 - Blocking
-  - Block user from sending messages
+  - Block users
 
 ## Installation
 
