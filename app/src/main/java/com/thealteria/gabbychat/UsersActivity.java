@@ -10,6 +10,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,17 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.thealteria.gabbychat.Account.AccountSettingsActivity;
 import com.thealteria.gabbychat.Account.ProfileActivity;
 import com.thealteria.gabbychat.Model.Users;
 
@@ -38,12 +44,9 @@ public class UsersActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mUserDatabase;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-
-
+    private String currentUserId;
     private FirebaseRecyclerAdapter<Users, UsersViewHolder> firebaseRecyclerAdapter;
     private DatabaseReference userRef;
-    private DatabaseReference currentUserId;
     private FirebaseUser currentUser;
 
     @Override
@@ -81,8 +84,8 @@ public class UsersActivity extends AppCompatActivity {
                 DividerItemDecoration(recyclerView.getContext(), linearLayout.getOrientation());
         recyclerView.addItemDecoration(mDividerItemDecoration);
 
-        currentUserId = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
+        currentUserId = mAuth.getCurrentUser().getUid();
 
         if (mAuth.getCurrentUser() != null) {
             userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
@@ -123,10 +126,18 @@ public class UsersActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        Intent profile_intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                        profile_intent.putExtra("user_id", uid);
-                        startActivity(profile_intent);
-                        //Toast.makeText(getApplicationContext(), uid, Toast.LENGTH_LONG).show();
+                        if(uid.equals(currentUserId)) {
+                            Intent profile_intent = new Intent(getApplicationContext(), AccountSettingsActivity.class);
+                                    startActivity(profile_intent);
+                        }
+
+                        else {
+                            Intent profile_intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                            profile_intent.putExtra("user_id", uid);
+                            startActivity(profile_intent);
+                            //Toast.makeText(getApplicationContext(), uid, Toast.LENGTH_LONG).show();
+                            Log.d("USER_ID: ", uid);
+                        }
                     }
                 });
             }

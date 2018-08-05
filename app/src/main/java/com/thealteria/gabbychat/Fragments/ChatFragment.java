@@ -122,6 +122,10 @@ public class ChatFragment extends Fragment {
                                     else if (type.equals("image")) {
                                         holder.setMessage("image", conv.isSeen());
                                     }
+
+                                    else {
+                                        holder.setMessage(null, conv.isSeen());
+                                    }
                                 }
 
                                 @Override

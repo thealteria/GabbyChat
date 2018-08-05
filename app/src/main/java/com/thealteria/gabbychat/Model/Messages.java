@@ -8,10 +8,6 @@ public class Messages {
 
     private String from;
 
-    public Messages(String from) {
-        this.from = from;
-    }
-
     public String getFrom() {
         return from;
     }

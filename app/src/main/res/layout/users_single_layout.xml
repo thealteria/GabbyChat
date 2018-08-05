@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:paddingBottom="10dp"
     android:paddingTop="15dp"
     android:paddingStart="10dp"
@@ -41,5 +42,41 @@
         android:layout_alignStart="@+id/singleName"
         android:layout_marginTop="33dp"
         android:text="Display status.." />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/userImage"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="33dp"
+        android:id="@+id/requestLayout"
+        android:visibility="gone">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:id="@+id/accept"
+            android:backgroundTint="@color/colorAccent"
+            android:elevation="5dp"
+            android:text="Accept"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:id="@+id/decline"
+            android:layout_marginStart="10dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:elevation="5dp"
+            android:text="Decline"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
 
 </RelativeLayout>

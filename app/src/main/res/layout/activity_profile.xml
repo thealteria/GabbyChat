@@ -76,10 +76,10 @@
         android:layout_centerHorizontal="true"
         android:onClick="declineRequest"
         android:layout_marginBottom="60dp"
-        android:clickable="true"
-        android:focusable="true"
         android:text="Decline Friend request"
         android:textColor="#fff"
+        android:clickable="true"
+        android:focusable="true"
         tools:backgroundTint="@color/colorAccent" />
 
 

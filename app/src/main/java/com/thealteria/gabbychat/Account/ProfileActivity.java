@@ -214,7 +214,7 @@ public class ProfileActivity extends AppCompatActivity {
             disableDeclineBtn();
         }
 
-        // ------------REQ RECEIVED STATE---------------
+        // ------------ACCEPT REQUEST---------------
 
         if (current_state.equals("req_received")) {
             final String currentDate = DateFormat.getDateInstance().format(new Date());
