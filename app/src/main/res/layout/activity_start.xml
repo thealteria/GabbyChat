@@ -69,21 +69,21 @@
                     android:layout_marginBottom="4dp"
                     android:text="E-mail"/>
 
-
                 <EditText
                     android:id="@+id/loginEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_add"
+                    android:drawableStart="@drawable/ic_email_black_24dp"
                     android:digits=".-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@"
                     android:inputType="textEmailAddress|textWebEmailAddress"
                     android:maxLines="1"
-                    android:padding="10dp"
+                    android:drawablePadding="12dp"
+                    android:textColor="#000"
+                    android:padding="15dp"
                     android:layout_marginStart="35dp"
                     android:layout_marginEnd="35dp"
                     android:singleLine="true"
                     android:background="#eee"
-                    android:textColor="#000"
                     tools:ignore="LabelFor" />
 
                 <TextView
@@ -99,16 +99,17 @@
                     android:id="@+id/loginPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:padding="10dp"
-                    android:layout_marginStart="35dp"
-                    android:layout_marginEnd="35dp"
-                    android:background="#eee"
                     android:drawableStart="@drawable/ic_lock_black_24dp"
-                    android:textColor="#999"
+                    android:drawablePadding="12dp"
+                    android:textColor="#000"
                     android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
                     android:inputType="textPassword"
                     android:maxLines="1"
+                    android:padding="17dp"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginEnd="35dp"
+                    android:singleLine="true"
+                    android:background="#eee"
                     tools:ignore="LabelFor" />
 
                 <EditText
@@ -210,13 +211,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#eee"
-                android:textColor="#999"
                 android:padding="17dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginEnd="35dp"
                 android:drawableStart="@drawable/ic_person_black_24dp"
                 android:digits=".-_ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
                 android:inputType="textCapSentences"
+                android:drawablePadding="12dp"
+                android:textColor="#000"
                 android:maxLines="1"
                 android:singleLine="true"
                 tools:ignore="LabelFor" />
@@ -241,7 +243,8 @@
                 android:background="#eee"
                 android:drawableStart="@drawable/ic_email_black_24dp"
                 android:singleLine="true"
-                android:textColor="#999"
+                android:drawablePadding="12dp"
+                android:textColor="#000"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 tools:ignore="LabelFor" />
@@ -267,7 +270,8 @@
                 android:singleLine="true"
                 android:backgroundTint="#eee"
                 android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
-                android:textColor="#999"
+                android:drawablePadding="12dp"
+                android:textColor="#000"
                 android:inputType="textPassword"
                 android:maxLines="1"/>
 
@@ -291,7 +295,8 @@
                 android:drawableStart="@drawable/ic_lock_black_24dp"
                 android:singleLine="true"
                 android:backgroundTint="#eee"
-                android:textColor="#999"
+                android:drawablePadding="12dp"
+                android:textColor="#000"
                 android:inputType="textPassword"
                 android:maxLines="1"
                 tools:ignore="LabelFor" />
