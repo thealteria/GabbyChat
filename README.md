@@ -1,58 +1,40 @@
 # GabbyChat
 
-GabbyChat is a open-source Android chatting App.
+GabbyChat is a open-source Android chatting App which uses [Firebase's](https://firebase.google.com) libraries for it's implementation and several other libraries that they are listed on [Third Party Notices](THIRD_PARTY_NOTICES.md).
 
-It uses [Firebase's](https://firebase.google.com) Authentication/Database/Storage/Messaging libraries for it's implementation and several other libraries that they are listed on [Third Party Notices](THIRD_PARTY_NOTICES.md).
-
-Based on [Lapit Chat](https://github.com/akshayejh/Lapit---Android-Firebase-Chat-App) [Youtube Series](https://www.youtube.com/playlist?list=PLGCjwl1RrtcQ3o2jmZtwu2wXEA4OIIq53).
+It is based on the [Youtube Series](https://www.youtube.com/playlist?list=PLGCjwl1RrtcQ3o2jmZtwu2wXEA4OIIq53) [Lapit Chat](https://github.com/akshayejh/Lapit---Android-Firebase-Chat-App) by Akshayejh.
 
 App's Privacy Policy and Terms and Conditions will be updated soon.
 
 ## Features 
 
-- Messaging
-  - Send and Receive messages
-  - Send pictures
-- Friends
-  - Accept, Decline or Remove Friends
-- Requests
-  - Send or Cancel Friend Request to users
-- Profile
-  - Update your Profile Picture
-  - Update your Status
-  - View other users profile
-- Notifications
-  - Notification when you have a new friend request
+- Send and Receive messages
+- Send pictures
 
-**Upcoming**
+- Accept, Decline or Remove Friends
+- Send or Cancel Friend Requests
 
-- Notifications
-  - Notification when you have a new message
-  - Notification when someone accepts your request
--Messages
-  - Sending audio, video files and documents
-  - Delete messages from everyone's chat
-- Blocking
-  - Block users
+- Update your Profile Picture
+- Update your Status
+- View other users profile
 
-## Installation
+- Notification when you have a new friend request
 
-*Setting up project*
+**More upcoming features**
 
-- Download Project
-- Create a new [Firebase](https://firebase.google.com) Project in console
-- Connect project with Firebase `(Tools/Firebase)` in Android Studio
-- Generate, download, paste `google-services.json` into the project
+- Notification when you have a new message
+- Notification when someone accepts your request
 
-*Setting up notifications back-end*
+- Sending audio, video files and documents
+- Delete messages from everyone's chat
 
-- Create a folder on your Desktop and open it
-- Start CMD (for Windows) or Terminal (for MacOS/Linux)
-- Login on Firebase CLI using `firebase login`
-- Type `firebase init`, select `Functions` using the `Space` key and hit `Enter`
-- Select your App, then `javascript`, `N` on ESLint, and `Y`on dependendcies with npm.
-- Navigate `functions` folder and replace `index.js` with [this](note.js)
-- Type `firebase deploy` and you are all set
+- Block users
+
+## Setting up Project
+
+- You've to connect the project with your firebase account which can be done via a Google account.
+- Go to the Firebase console, connect the project and generate and download a "google-services.json" file and paste it in the project.
+
 
 **NOTE:** make sure you read project's [LICENSE](LICENSE.md) before start playing with it.
 
