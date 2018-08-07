@@ -1,6 +1,6 @@
 # GabbyChat
 
-GabbyChat is a open-source Android chatting App which uses [Firebase's](https://firebase.google.com) libraries for it's implementation and several other libraries, listed on [Third Party Notices](THIRD_PARTY_NOTICES.md).
+GabbyChat is an open-source Android chatting application which uses [Firebase](https://firebase.google.com) libraries and several other libraries for it's implementation, listed on [Third Party Notices](THIRD_PARTY_NOTICES.md).
 
 It is based on the [Youtube Series](https://www.youtube.com/playlist?list=PLGCjwl1RrtcQ3o2jmZtwu2wXEA4OIIq53) [Lapit Chat](https://github.com/akshayejh/Lapit---Android-Firebase-Chat-App) by Akshayejh.
 
