@@ -21,7 +21,7 @@ App's Privacy Policy and Terms and Conditions will be updated soon.
 - Notification when you have a new friend request
 
 
-**More upcoming features**
+## Upcoming features
 
 - Notification when you have a new message
 - Notification when someone accepts your request
@@ -37,7 +37,7 @@ App's Privacy Policy and Terms and Conditions will be updated soon.
 - Go to the Firebase console, connect the project and generate and download a "google-services.json" file and paste it in the project.
 
 
-**NOTE:** make sure you read project's [LICENSE](LICENSE.md) before start playing with it.
+**NOTE:** Make sure you read project's [LICENSE](LICENSE.md) before start playing with it :)
 
 ## License
 
