@@ -20,6 +20,7 @@ App's Privacy Policy and Terms and Conditions will be updated soon.
 
 - Notification when you have a new friend request
 
+
 **More upcoming features**
 
 - Notification when you have a new message
