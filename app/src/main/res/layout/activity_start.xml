@@ -69,37 +69,22 @@
                     android:layout_marginBottom="4dp"
                     android:text="E-mail"/>
 
-                <RelativeLayout
+
+                <EditText
+                    android:id="@+id/loginEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_add"
+                    android:digits=".-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@"
+                    android:inputType="textEmailAddress|textWebEmailAddress"
+                    android:maxLines="1"
+                    android:padding="10dp"
                     android:layout_marginStart="35dp"
                     android:layout_marginEnd="35dp"
-                    android:padding="6dp"
-                    android:background="#eee">
-
-                    <ImageView
-                        android:id="@+id/emailPic"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ic_email_black_24dp"/>
-
-                    <EditText
-                        android:id="@+id/loginEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_toEndOf="@+id/emailPic"
-                        android:digits=".-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@"
-                        android:inputType="textEmailAddress|textWebEmailAddress"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:backgroundTint="#eee"
-                        android:textColor="#999" />
-
-                </RelativeLayout>
+                    android:singleLine="true"
+                    android:background="#eee"
+                    android:textColor="#000"
+                    tools:ignore="LabelFor" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -110,36 +95,39 @@
                     android:layout_marginBottom="4dp"
                     android:text="Password"/>
 
-                <RelativeLayout
+                <EditText
+                    android:id="@+id/loginPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:padding="10dp"
                     android:layout_marginStart="35dp"
                     android:layout_marginEnd="35dp"
-                    android:padding="6dp"
-                    android:background="#eee">
+                    android:background="#eee"
+                    android:drawableStart="@drawable/ic_lock_black_24dp"
+                    android:textColor="#999"
+                    android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    tools:ignore="LabelFor" />
 
-                    <ImageView
-                        android:id="@+id/passPic"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ic_lock_black_24dp"/>
+                <EditText
+                    android:id="@+id/loginPassword2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:padding="10dp"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginEnd="35dp"
+                    android:background="#eee"
+                    android:drawableStart="@drawable/ic_lock_black_24dp"
+                    android:textColor="#999"
+                    android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    tools:ignore="LabelFor"
+                    android:visibility="gone"/>
 
-                    <EditText
-                        android:id="@+id/loginPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_toEndOf="@+id/passPic"
-                        android:singleLine="true"
-                        android:backgroundTint="#eee"
-                        android:textColor="#999"
-                        android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
-                        android:inputType="textPassword"
-                        android:maxLines="1"/>
-                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -149,21 +137,23 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="4dp">
 
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/show_password"
-                    android:id="@+id/loginShowPass" />
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/show_password"
+                        android:id="@+id/loginShowPass"
+                        tools:ignore="RelativeOverlap" />
 
-                <TextView
-                    android:id="@+id/lforgotPassword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Forget Password"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:textSize="15sp"
-                    android:onClick="lForgetPass"/>
+
+                    <TextView
+                        android:id="@+id/lforgotPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Forget Password"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:textSize="15sp"
+                        android:onClick="lForgetPass"/>
                 </RelativeLayout>
 
                 <com.dd.processbutton.iml.ActionProcessButton
@@ -181,7 +171,7 @@
                     app:pb_colorPressed="@color/colorPrimary"
                     app:pb_colorProgress="@android:color/holo_purple"
                     app:pb_colorError="@android:color/holo_red_dark"
-                    app:pb_textComplete="Success"
+                    app:pb_textComplete="Logging in"
                     app:pb_textProgress="Please wait..."
                     app:pb_textError="Error" />
 
@@ -215,37 +205,22 @@
                 android:layout_marginBottom="4dp"
                 android:text="Name"/>
 
-            <RelativeLayout
+            <EditText
+                android:id="@+id/registerName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#eee"
+                android:textColor="#999"
+                android:padding="17dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginEnd="35dp"
-                android:padding="6dp"
-                android:background="#eee">
+                android:drawableStart="@drawable/ic_person_black_24dp"
+                android:digits=".-_ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:singleLine="true"
+                tools:ignore="LabelFor" />
 
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/ic_person_black_24dp"/>
-
-                <EditText
-                    android:id="@+id/registerName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_toEndOf="@+id/image"
-                    android:backgroundTint="#eee"
-                    android:textColor="#999"
-                    android:digits=".-_ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
-                    android:inputType="textCapSentences"
-                    android:maxLines="1"
-                    android:singleLine="true"/>
-
-            </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -256,36 +231,20 @@
                 android:layout_marginBottom="4dp"
                 android:text="E-mail"/>
 
-            <RelativeLayout
+            <EditText
+                android:id="@+id/registerEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="17dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginEnd="35dp"
-                android:padding="6dp"
-                android:background="#eee">
-
-                <ImageView
-                    android:id="@+id/emailPic2"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/ic_email_black_24dp"/>
-
-                <EditText
-                    android:id="@+id/registerEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_toEndOf="@+id/emailPic2"
-                    android:singleLine="true"
-                    android:backgroundTint="#eee"
-                    android:textColor="#999"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"/>
-
-            </RelativeLayout>
+                android:background="#eee"
+                android:drawableStart="@drawable/ic_email_black_24dp"
+                android:singleLine="true"
+                android:textColor="#999"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                tools:ignore="LabelFor" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -296,36 +255,21 @@
                 android:layout_marginBottom="4dp"
                 android:text="Password"/>
 
-            <RelativeLayout
+            <EditText
+                android:id="@+id/registerPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="17dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginEnd="35dp"
-                android:padding="6dp"
-                android:background="#eee">
-
-                <ImageView
-                    android:id="@+id/rpassPic"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/ic_lock_black_24dp"/>
-
-                <EditText
-                    android:id="@+id/registerPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_toEndOf="@+id/rpassPic"
-                    android:singleLine="true"
-                    android:backgroundTint="#eee"
-                    android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
-                    android:textColor="#999"
-                    android:inputType="textPassword"
-                    android:maxLines="1"/>
-            </RelativeLayout>
+                android:background="#eee"
+                android:drawableStart="@drawable/ic_lock_black_24dp"
+                android:singleLine="true"
+                android:backgroundTint="#eee"
+                android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
+                android:textColor="#999"
+                android:inputType="textPassword"
+                android:maxLines="1"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -336,35 +280,21 @@
                 android:layout_marginBottom="4dp"
                 android:text="Confirm Password"/>
 
-            <RelativeLayout
+            <EditText
+                android:id="@+id/registerConfirmPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="17dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginEnd="35dp"
-                android:padding="6dp"
-                android:background="#eee">
-
-                <ImageView
-                    android:id="@+id/test6"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/ic_lock_black_24dp"/>
-
-                <EditText
-                    android:id="@+id/registerConfirmPass"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_toEndOf="@+id/test6"
-                    android:singleLine="true"
-                    android:backgroundTint="#eee"
-                    android:textColor="#999"
-                    android:inputType="textPassword"
-                    android:maxLines="1"/>
-            </RelativeLayout>
+                android:background="#eee"
+                android:drawableStart="@drawable/ic_lock_black_24dp"
+                android:singleLine="true"
+                android:backgroundTint="#eee"
+                android:textColor="#999"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                tools:ignore="LabelFor" />
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -388,22 +318,12 @@
                 android:textColor="#fff"
                 app:pb_colorComplete="@android:color/holo_green_light"
                 app:pb_colorNormal="@color/colorAccent"
-                app:pb_colorPressed="@android:color/holo_blue_dark"
+                app:pb_colorPressed="#ffa500"
                 app:pb_colorProgress="#ffffff"
                 app:pb_colorError="@android:color/holo_red_dark"
-                app:pb_textComplete="Success"
+                app:pb_textComplete="Registering.."
                 app:pb_textProgress="Please wait..."
-                app:pb_textError="Error" />
-
-            <!--<TextView-->
-            <!--android:id="@+id/register_terms"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="6dp"-->
-            <!--android:layout_marginBottom="10dp"-->
-            <!--android:text="By registering you Accept our Terms of Service."-->
-            <!--android:textAlignment="center"-->
-            <!--android:textSize="12sp" />-->
+                app:pb_textError="Please try again.." />
 
         </LinearLayout>
 

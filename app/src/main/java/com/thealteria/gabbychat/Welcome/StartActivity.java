@@ -42,6 +42,7 @@ public class StartActivity extends AppCompatActivity
     private TextView forgetPass;
     private EditText loginEmail, loginPassword, registerName, registerEmail, registerPassword, registerConfrmPassword;
     private CheckBox regShowPass, loginShowPass;
+    private EditText loginPassword2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,6 +59,7 @@ public class StartActivity extends AppCompatActivity
         registerConfrmPassword = findViewById(R.id.registerConfirmPass);
         regShowPass = findViewById(R.id.regShowPass);
         loginShowPass = findViewById(R.id.loginShowPass);
+        loginPassword2 = findViewById(R.id.loginPassword2);
         forgetPass = findViewById(R.id.lforgotPassword);
 
         mAuth = FirebaseAuth.getInstance();
@@ -70,7 +72,7 @@ public class StartActivity extends AppCompatActivity
         loginButton.setMode(ActionProcessButton.Mode.ENDLESS);
 
         showPass(regShowPass, registerPassword, registerConfrmPassword);
-        showPass(loginShowPass, loginPassword, null);
+        showPass(loginShowPass, loginPassword, loginPassword2);
 
         loginButton.setOnClickListener(new View.OnClickListener()
         {
@@ -92,7 +94,7 @@ public class StartActivity extends AppCompatActivity
 
                 if(lEmail.length() == 0 || lPass.length() == 0)
                 {
-                    Toast.makeText(getApplicationContext(), "Fields cannot be empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please enter your details..", Toast.LENGTH_SHORT).show();
 
                     loginButton.setProgress(-1);
 
@@ -196,12 +198,12 @@ public class StartActivity extends AppCompatActivity
 
                 if(regName.length() == 0 || regEmail.length() == 0 || regPass.length() == 0 || regCnfrmPass.length() == 0)
                 {
-                    Toast.makeText(getApplicationContext(), "Fields cannot be empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please enter your details..", Toast.LENGTH_SHORT).show();
 
                     registerButton.setProgress(-1);
 
                     setButton(registerButton);
-                    loginButton.setClickable(true);
+                    registerButton.setClickable(true);
                 }
 
                 else if (!regPass.equals(regCnfrmPass)) {
@@ -212,7 +214,7 @@ public class StartActivity extends AppCompatActivity
                     setButton(registerButton);
                     registerButton.setClickable(true);
 
-                    loginButton.setClickable(true);
+                    registerButton.setClickable(true);
                 }
 
                 else
