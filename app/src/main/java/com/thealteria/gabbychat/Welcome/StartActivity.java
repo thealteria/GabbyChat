@@ -130,8 +130,7 @@ public class StartActivity extends AppCompatActivity
                                         "Cannot Log in. Check your Email or password..",
                                         Toast.LENGTH_SHORT).show();
 
-                                Log.d(TAG, "signIn failed: " + Objects.requireNonNull(task.getException())
-                                        .getMessage());
+                                Log.d(TAG, "signIn failed: " + Objects.requireNonNull(task.getException()).getMessage());
 
                                 loginButton.setProgress(-1);
                                 setButton(loginButton);
@@ -252,8 +251,7 @@ public class StartActivity extends AppCompatActivity
                                             }
                                             else
                                             {
-                                                Log.d(TAG, "registerData failed: " + Objects.requireNonNull(task
-                                                        .getException()).getMessage());
+                                                Log.d(TAG, "registerData failed: " + task.getException().getMessage());
                                             }
                                         }
                                     });
@@ -264,8 +262,7 @@ public class StartActivity extends AppCompatActivity
                                 Toast.makeText(getApplicationContext(),
                                         "Cannot Sign in. Use another email and try again..", Toast.LENGTH_LONG).show();
 
-                                Log.d(TAG, "createUser failed: " + Objects.requireNonNull(task.getException())
-                                        .getMessage());
+                                Log.d(TAG, "createUser failed: " + task.getException().getMessage());
 
                                 registerButton.setProgress(-1);
                                 setButton(registerButton);
@@ -362,8 +359,6 @@ public class StartActivity extends AppCompatActivity
                                                     Toast.LENGTH_SHORT).show();
                                     }
                                 });
-
-
                     }
                 }).show();
     }
