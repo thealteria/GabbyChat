@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".Utils.GabbyChat"
@@ -27,12 +28,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Welcome.StartActivity" />
-        <activity
-            android:name=".Register.RegisterActivity"
-            android:parentActivityName=".Welcome.StartActivity" />
-        <activity
-            android:name=".Login.LoginActivity"
-            android:parentActivityName=".Welcome.StartActivity" />
         <activity android:name=".Account.AccountSettingsActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

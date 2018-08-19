@@ -25,6 +25,8 @@ import com.thealteria.gabbychat.Account.AccountSettingsActivity;
 import com.thealteria.gabbychat.Utils.SectionsPageAdapter;
 import com.thealteria.gabbychat.Welcome.StartActivity;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         mtoolbar = findViewById(R.id.appbar);
         setSupportActionBar(mtoolbar);
-        getSupportActionBar().setTitle("Gabby Chat");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Gabby Chat");
 
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
 
@@ -50,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.mainTabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setText("Requests");
-        tabLayout.getTabAt(1).setText("Chats");
-        tabLayout.getTabAt(2).setText("Friends");
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setText("Requests");
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setText("Chats");
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setText("Friends");
 
 
         currentUserId = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void gotoStart() {
+    private void gotoStart() {
         Intent intent = new Intent(MainActivity.this, StartActivity.class);
         startActivity(intent);
         finish();
@@ -120,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        MenuItem item = menu.findItem(R.id.call);
+        item.setVisible(false);
+
         return true;
     }
 

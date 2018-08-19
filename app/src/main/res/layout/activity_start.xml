@@ -66,10 +66,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="35dp"
                     android:layout_marginEnd="35dp"
-                    android:layout_marginBottom="4dp"
                     android:text="E-mail"/>
 
-                <EditText
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginEnd="35dp">
+
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/loginEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -80,22 +85,28 @@
                     android:drawablePadding="12dp"
                     android:textColor="#000"
                     android:padding="15dp"
-                    android:layout_marginStart="35dp"
-                    android:layout_marginEnd="35dp"
                     android:singleLine="true"
                     android:background="#eee"
                     tools:ignore="LabelFor" />
+                </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="35dp"
                     android:layout_marginEnd="35dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="15dp"
                     android:text="Password"/>
 
-                <EditText
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginEnd="35dp"
+                    sothree:passwordToggleEnabled="true"
+                    sothree:passwordToggleTint="@color/colorPrimaryDark">
+
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/loginPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -104,31 +115,13 @@
                     android:textColor="#000"
                     android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
                     android:inputType="textPassword"
-                    android:maxLines="1"
                     android:padding="17dp"
-                    android:layout_marginStart="35dp"
-                    android:layout_marginEnd="35dp"
+                    android:maxLines="1"
                     android:singleLine="true"
                     android:background="#eee"
                     tools:ignore="LabelFor" />
 
-                <EditText
-                    android:id="@+id/loginPassword2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:padding="10dp"
-                    android:layout_marginStart="35dp"
-                    android:layout_marginEnd="35dp"
-                    android:background="#eee"
-                    android:drawableStart="@drawable/ic_lock_black_24dp"
-                    android:textColor="#999"
-                    android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    tools:ignore="LabelFor"
-                    android:visibility="gone"/>
-
+                </android.support.design.widget.TextInputLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -137,14 +130,6 @@
                     android:layout_marginEnd="35dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="4dp">
-
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/show_password"
-                        android:id="@+id/loginShowPass"
-                        tools:ignore="RelativeOverlap" />
-
 
                     <TextView
                         android:id="@+id/lforgotPassword"
@@ -203,26 +188,29 @@
                 android:layout_marginStart="35dp"
                 android:layout_marginEnd="35dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="4dp"
                 android:text="Name"/>
 
-            <EditText
-                android:id="@+id/registerName"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#eee"
-                android:padding="17dp"
                 android:layout_marginStart="35dp"
-                android:layout_marginEnd="35dp"
-                android:drawableStart="@drawable/ic_person_black_24dp"
-                android:digits=".-_ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
-                android:inputType="textCapSentences"
-                android:drawablePadding="12dp"
-                android:textColor="#000"
-                android:maxLines="1"
-                android:singleLine="true"
-                tools:ignore="LabelFor" />
+                android:layout_marginEnd="35dp">
 
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/registerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_person_black_24dp"
+                    android:digits=".-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@"
+                    android:inputType="textCapSentences"
+                    android:maxLines="1"
+                    android:drawablePadding="12dp"
+                    android:textColor="#000"
+                    android:padding="15dp"
+                    android:singleLine="true"
+                    android:background="#eee"
+                    tools:ignore="LabelFor" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -233,21 +221,27 @@
                 android:layout_marginBottom="4dp"
                 android:text="E-mail"/>
 
-            <EditText
-                android:id="@+id/registerEmail"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="17dp"
                 android:layout_marginStart="35dp"
-                android:layout_marginEnd="35dp"
-                android:background="#eee"
-                android:drawableStart="@drawable/ic_email_black_24dp"
-                android:singleLine="true"
-                android:drawablePadding="12dp"
-                android:textColor="#000"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                tools:ignore="LabelFor" />
+                android:layout_marginEnd="35dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/registerEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_email_black_24dp"
+                    android:digits=".-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@"
+                    android:inputType="textEmailAddress|textWebEmailAddress"
+                    android:maxLines="1"
+                    android:drawablePadding="12dp"
+                    android:textColor="#000"
+                    android:padding="17dp"
+                    android:singleLine="true"
+                    android:background="#eee"
+                    tools:ignore="LabelFor" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -258,22 +252,29 @@
                 android:layout_marginBottom="4dp"
                 android:text="Password"/>
 
-            <EditText
-                android:id="@+id/registerPassword"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="17dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginEnd="35dp"
-                android:background="#eee"
-                android:drawableStart="@drawable/ic_lock_black_24dp"
-                android:singleLine="true"
-                android:backgroundTint="#eee"
-                android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
-                android:drawablePadding="12dp"
-                android:textColor="#000"
-                android:inputType="textPassword"
-                android:maxLines="1"/>
+                sothree:passwordToggleEnabled="true"
+                sothree:passwordToggleTint="@color/colorPrimaryDark">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/registerPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="17dp"
+                    android:background="#eee"
+                    android:drawableStart="@drawable/ic_lock_black_24dp"
+                    android:singleLine="true"
+                    android:backgroundTint="#eee"
+                    android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
+                    android:drawablePadding="12dp"
+                    android:textColor="#000"
+                    android:inputType="textPassword"
+                    android:maxLines="1"/>
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -284,32 +285,30 @@
                 android:layout_marginBottom="4dp"
                 android:text="Confirm Password"/>
 
-            <EditText
-                android:id="@+id/registerConfirmPass"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="17dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginEnd="35dp"
-                android:background="#eee"
-                android:drawableStart="@drawable/ic_lock_black_24dp"
-                android:singleLine="true"
-                android:backgroundTint="#eee"
-                android:drawablePadding="12dp"
-                android:textColor="#000"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                tools:ignore="LabelFor" />
+                sothree:passwordToggleEnabled="true"
+                sothree:passwordToggleTint="@color/colorPrimaryDark">
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/show_password"
-                android:id="@+id/regShowPass"
-                android:layout_marginStart="35dp"
-                android:layout_marginEnd="35dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="4dp"/>
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/registerConfirmPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="17dp"
+                    android:background="#eee"
+                    android:drawableStart="@drawable/ic_lock_black_24dp"
+                    android:singleLine="true"
+                    android:backgroundTint="#eee"
+                    tools:ignore="LabelFor"
+                    android:digits="._ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$&amp;"
+                    android:drawablePadding="12dp"
+                    android:textColor="#000"
+                    android:inputType="textPassword"
+                    android:maxLines="1"/>
+            </android.support.design.widget.TextInputLayout>
 
             <com.dd.processbutton.iml.ActionProcessButton
                 android:id="@+id/registerButton"
@@ -329,7 +328,6 @@
                 app:pb_textComplete="Registering.."
                 app:pb_textProgress="Please wait..."
                 app:pb_textError="Please try again.." />
-
         </LinearLayout>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>

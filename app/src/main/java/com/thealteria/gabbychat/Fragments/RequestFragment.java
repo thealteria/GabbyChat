@@ -1,14 +1,11 @@
 package com.thealteria.gabbychat.Fragments;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +21,6 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,16 +31,14 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.thealteria.gabbychat.Account.ChatActivity;
 import com.thealteria.gabbychat.Account.ProfileActivity;
-import com.thealteria.gabbychat.Model.Friends;
 import com.thealteria.gabbychat.Model.Request;
-import com.thealteria.gabbychat.Model.Users;
 import com.thealteria.gabbychat.R;
-import com.thealteria.gabbychat.UsersActivity;
 
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -80,7 +74,7 @@ public class RequestFragment extends Fragment {
         noRequests = view.findViewById(R.id.noRequests);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        currentUserId = mAuth.getCurrentUser().getUid();
+        currentUserId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         mRootRef = FirebaseDatabase.getInstance().getReference();
         requestDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_Request");
         usersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -121,7 +115,7 @@ public class RequestFragment extends Fragment {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                                     if(dataSnapshot.exists()) {
-                                        String requestType = dataSnapshot.getValue().toString();
+                                        String requestType = Objects.requireNonNull(dataSnapshot.getValue()).toString();
                                         if (requestType.equals("received")) {
 
                                             if (uid != null) {
@@ -129,9 +123,10 @@ public class RequestFragment extends Fragment {
                                                 usersDatabase.child(uid).addValueEventListener(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                                        final String name = dataSnapshot.child("name").getValue().toString();
-                                                        final String thumb_image = dataSnapshot.child("thumb_image").
-                                                                getValue().toString();
+                                                        final String name = Objects.requireNonNull(dataSnapshot.child("name")
+                                                                .getValue()).toString();
+                                                        final String thumb_image = Objects.requireNonNull(dataSnapshot.child("thumb_image").
+                                                                getValue()).toString();
 
                                                         holder.setName(name);
                                                         holder.setImage(thumb_image);
@@ -183,9 +178,10 @@ public class RequestFragment extends Fragment {
                                                 usersDatabase.child(uid).addValueEventListener(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                                        final String name = dataSnapshot.child("name").getValue().toString();
-                                                        final String thumb_image = dataSnapshot.child("thumb_image").
-                                                                getValue().toString();
+                                                        final String name = Objects.requireNonNull(dataSnapshot
+                                                                .child("name").getValue()).toString();
+                                                        final String thumb_image = Objects.requireNonNull(dataSnapshot.child("thumb_image").
+                                                                getValue()).toString();
 
                                                         holder.setName(name);
                                                         holder.setImage(thumb_image);

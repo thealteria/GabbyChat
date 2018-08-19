@@ -12,9 +12,9 @@
         android:id="@+id/logout"
         android:title="Log Out" />
 
-    <item
-        android:id="@+id/search"
-        android:title="Search"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_search"/>
+    <!--<item-->
+        <!--android:id="@+id/call"-->
+        <!--android:title="Call"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--android:icon="@drawable/ic_search"/>-->
 </menu>

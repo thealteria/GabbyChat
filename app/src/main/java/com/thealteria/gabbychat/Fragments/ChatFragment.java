@@ -32,6 +32,8 @@ import com.thealteria.gabbychat.Account.ChatActivity;
 import com.thealteria.gabbychat.Model.Conv;
 import com.thealteria.gabbychat.R;
 
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatFragment extends Fragment {
@@ -113,18 +115,19 @@ public class ChatFragment extends Fragment {
                             lastMessage.addChildEventListener(new ChildEventListener() {
                                 @Override
                                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                    String type = dataSnapshot.child("type").getValue().toString();
-                                    String data = dataSnapshot.child("message").getValue().toString();
+                                    String type = Objects.requireNonNull(dataSnapshot.child("type").getValue()).toString();
+                                    String data = Objects.requireNonNull(dataSnapshot.child("message").getValue()).toString();
 
-                                    if (type.equals("text")) {
-                                        holder.setMessage(data, conv.isSeen());
-                                    }
-                                    else if (type.equals("image")) {
-                                        holder.setMessage("image", conv.isSeen());
-                                    }
-
-                                    else {
-                                        holder.setMessage(null, conv.isSeen());
+                                    switch (type) {
+                                        case "text":
+                                            holder.setMessage(data, conv.isSeen());
+                                            break;
+                                        case "image":
+                                            holder.setMessage("image", conv.isSeen());
+                                            break;
+                                        default:
+                                            holder.setMessage(" ", conv.isSeen());
+                                            break;
                                     }
                                 }
 
@@ -155,10 +158,10 @@ public class ChatFragment extends Fragment {
                                     final String name = dataSnapshot.child("name").getValue().toString();
                                     final String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
-                                    if (dataSnapshot.hasChild("online")) {
-                                        String userOnline = dataSnapshot.child("online").getValue().toString();
-                                        holder.setUserOnline(userOnline);
-                                    }
+//                                    if (dataSnapshot.hasChild("online")) {
+//                                        String userOnline = dataSnapshot.child("online").getValue().toString();
+//                                        holder.setUserOnline(userOnline);
+//                                    }
 
                                     holder.setName(name);
                                     holder.setImage(thumb_image);
@@ -186,6 +189,12 @@ public class ChatFragment extends Fragment {
                         public ConvViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.users_single_layout,
                                     parent, false);
+
+                            TextView userStatus = view.findViewById(R.id.userStatus);
+                            TextView userMsg = view.findViewById(R.id.userMsg);
+
+                            userMsg.setVisibility(View.VISIBLE);
+                            userStatus.setVisibility(View.GONE);
 
                             return new ChatFragment.ConvViewHolder(view);
                         }
@@ -219,22 +228,20 @@ public class ChatFragment extends Fragment {
         }
 
         public void setMessage(String message, boolean isSeen){
+            TextView userMsg = view.findViewById(R.id.userMsg);
 
-            TextView userStatusView = view.findViewById(R.id.userStatus);
-            userStatusView.setText(message);
+                userMsg.setText(message);
 
             if(!isSeen){
-                userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.BOLD);
+                userMsg.setTypeface(userMsg.getTypeface(), Typeface.BOLD);
             } else {
-                userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.NORMAL);
+                userMsg.setTypeface(userMsg.getTypeface(), Typeface.NORMAL);
             }
         }
 
         public void setName(String name) {
-
             TextView mName = view.findViewById(R.id.singleName);
             mName.setText(name);
-
         }
 
         public void setImage(final String thumb_image) {
@@ -255,16 +262,16 @@ public class ChatFragment extends Fragment {
             });
         }
 
-        public void setUserOnline (String ifOnline) {
-            ImageView onlineImage = view.findViewById(R.id.onlineStatus);
-            onlineImage.setVisibility(View.VISIBLE);
-
-            if (ifOnline.equals("true")) {
-                onlineImage.setImageResource(R.drawable.draw_online);
-            }
-            else {
-                onlineImage.setImageResource(R.drawable.draw_offline);
-            }
-        }
+//        public void setUserOnline (String ifOnline) {
+//            ImageView onlineImage = view.findViewById(R.id.onlineStatus);
+//            onlineImage.setVisibility(View.VISIBLE);
+//
+//            if (ifOnline.equals("true")) {
+//                onlineImage.setImageResource(R.drawable.draw_online);
+//            }
+//            else {
+//                onlineImage.setImageResource(R.drawable.draw_offline);
+//            }
+//        }
     }
 }

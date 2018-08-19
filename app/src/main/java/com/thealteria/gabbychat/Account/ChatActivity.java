@@ -1,14 +1,14 @@
 package com.thealteria.gabbychat.Account;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +17,8 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,7 +33,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,9 +41,9 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.thealteria.gabbychat.Model.Messages;
 import com.thealteria.gabbychat.R;
 import com.thealteria.gabbychat.Utils.GetTimeAgo;
-import com.thealteria.gabbychat.Model.Messages;
 import com.thealteria.gabbychat.Utils.MessagesAdapter;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -50,40 +51,42 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private String chatUser, chatName, chatThumbImage, currentUserId;
+    private String chatUser, currentUserId;
     private Toolbar mChatToolbar;
 
-    private TextView titleView, lastSeen;
+    private TextView lastSeen;
     private CircleImageView profileImage;
     private RecyclerView messagesList;
 
     private DatabaseReference rootRef, typingRef, chatRef, messageRef, userDB ;
     private FirebaseAuth mAuth;
 
-    private ImageButton chatAddBtn, chatSendBtn;
+    private ImageButton chatSendBtn;
     private EditText chatMsg;
 
     private final List<Messages> mMessagesList = new ArrayList<>();
-    private LinearLayoutManager linearLayout;
     private MessagesAdapter adapter;
 
     //private SwipeRefreshLayout refreshLayout;
 
-    private static final int TOTAL_ITEMS_TO_LOAD = 10;
-    private int currentPage = 1, itemPos = 0;
-    private Query messageQuery;
-
-    private String lastKey = "";
-    private String prevKey = "";
+//    private static final int TOTAL_ITEMS_TO_LOAD = 10;
+//    private int currentPage = 1, itemPos = 0;
+//    private Query messageQuery;
+//
+//    private String lastKey = "";
+//    private String prevKey = "";
     private static final int GALLERY_PICK = 1;
     private StorageReference imageStorage;
     private ProgressDialog progressDialog;
 
+
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +100,7 @@ public class ChatActivity extends AppCompatActivity {
         userDB.keepSynced(true);
 
         mAuth = FirebaseAuth.getInstance();
-        currentUserId = mAuth.getCurrentUser().getUid();
+        currentUserId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
         chatUser = getIntent().getStringExtra("user_id");
         String mchatName = getIntent().getStringExtra("chat_name");
@@ -117,10 +120,10 @@ public class ChatActivity extends AppCompatActivity {
 
         }
 
-        titleView = findViewById(R.id.chatName);
+        TextView titleView = findViewById(R.id.chatName);
         lastSeen = findViewById(R.id.chatLastSeen);
         profileImage = findViewById(R.id.chatImage);
-        chatAddBtn = findViewById(R.id.chat_add);
+        ImageButton chatAddBtn = findViewById(R.id.chat_add);
         chatSendBtn = findViewById(R.id.chat_send);
         chatMsg = findViewById(R.id.chat_message);
 
@@ -130,7 +133,7 @@ public class ChatActivity extends AppCompatActivity {
         messagesList = findViewById(R.id.messagesList);
         //refreshLayout = findViewById(R.id.messageSwipe);
 
-        linearLayout = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayout = new LinearLayoutManager(this);
         messagesList.setHasFixedSize(true);
         messagesList.setLayoutManager(linearLayout);
 
@@ -139,7 +142,6 @@ public class ChatActivity extends AppCompatActivity {
         loadMessages();
 
         titleView.setText(mchatName);
-
 
         chatRef = FirebaseDatabase.getInstance().getReference().child("Chat").child(chatUser).child(currentUserId);
 
@@ -187,8 +189,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                final String online = dataSnapshot.child("online").getValue().toString();
-                final String image = dataSnapshot.child("image").getValue().toString();
+                final String online = Objects.requireNonNull(dataSnapshot.child("online").getValue()).toString();
+                final String image = Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString();
 
                 Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.boy)
                         .error(R.drawable.boy).into(profileImage, new Callback() {
@@ -213,7 +215,7 @@ public class ChatActivity extends AppCompatActivity {
                     typingRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            String bool = dataSnapshot.child("typing").getValue().toString();
+                            String bool = Objects.requireNonNull(dataSnapshot.child("typing").getValue()).toString();
 
                             if (!bool.equals("false")) {
                                 lastSeen.setText("typing..");
@@ -222,7 +224,7 @@ public class ChatActivity extends AppCompatActivity {
                             else {
                                 GetTimeAgo getTimeAgo = new GetTimeAgo();
                                 long lastTime = Long.parseLong(online);
-                                String lastSeenTime = getTimeAgo.getTimeAgo(lastTime, getApplicationContext());
+                                String lastSeenTime = GetTimeAgo.getTimeAgo(lastTime, getApplicationContext());
 
                                 lastSeen.setText("last seen " + lastSeenTime);
                             }
@@ -260,7 +262,7 @@ public class ChatActivity extends AppCompatActivity {
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
                             if(databaseError != null) {
-                                Log.d("CHAT LOG", databaseError.getMessage().toString());
+                                Log.d("CHAT LOG", databaseError.getMessage());
                             }
 
                         }
@@ -499,6 +501,36 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        super.onCreateOptionsMenu(menu);
+//        getMenuInflater().inflate(R.menu.main_menu, menu);
+//        MenuItem item;
+//
+//        item = menu.findItem(R.id.logout);
+//        item.setVisible(false);
+//
+//        item= menu.findItem(R.id.all_users);
+//        item.setVisible(false);
+//        item= menu.findItem(R.id.accsettings);
+//        item.setVisible(false);
+//
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        super.onOptionsItemSelected(item);
+//
+//        if (item.getItemId() == R.id.call) {
+//            Intent intent = new Intent(getApplicationContext(), CallActivity.class);
+//            intent.putExtra("recipientId", chatUser);
+//            chatUser = getIntent().getStringExtra("user_id");
+//            startActivity(intent);
+//        }
+//        return true;
+//    }
+
     public void chat_send(View view) {
         String message = chatMsg.getText().toString();
 
@@ -540,7 +572,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
                 if(databaseError != null) {
-                    Log.d("CHAT_LOG", databaseError.getMessage().toString());
+                    Log.d("CHAT_LOG", databaseError.getMessage());
                 }
             }
         });

@@ -5,16 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -32,6 +29,7 @@ import com.thealteria.gabbychat.MainActivity;
 import com.thealteria.gabbychat.R;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class StartActivity extends AppCompatActivity
 {
@@ -39,10 +37,7 @@ public class StartActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private DatabaseReference userDatabase, database;
     private ActionProcessButton loginButton;
-    private TextView forgetPass;
-    private EditText loginEmail, loginPassword, registerName, registerEmail, registerPassword, registerConfrmPassword;
-    private CheckBox regShowPass, loginShowPass;
-    private EditText loginPassword2;
+    private TextInputEditText loginEmail, loginPassword, registerName, registerEmail, registerPassword, registerConfrmPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,10 +52,6 @@ public class StartActivity extends AppCompatActivity
         registerEmail = findViewById(R.id.registerEmail);
         registerPassword = findViewById(R.id.registerPassword);
         registerConfrmPassword = findViewById(R.id.registerConfirmPass);
-        regShowPass = findViewById(R.id.regShowPass);
-        loginShowPass = findViewById(R.id.loginShowPass);
-        loginPassword2 = findViewById(R.id.loginPassword2);
-        forgetPass = findViewById(R.id.lforgotPassword);
 
         mAuth = FirebaseAuth.getInstance();
         userDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -70,9 +61,6 @@ public class StartActivity extends AppCompatActivity
         loginButton = findViewById(R.id.loginButton);
         loginButton.setProgress(0);
         loginButton.setMode(ActionProcessButton.Mode.ENDLESS);
-
-        showPass(regShowPass, registerPassword, registerConfrmPassword);
-        showPass(loginShowPass, loginPassword, loginPassword2);
 
         loginButton.setOnClickListener(new View.OnClickListener()
         {
@@ -114,7 +102,8 @@ public class StartActivity extends AppCompatActivity
                             if(task.isSuccessful())
                             {
                                 String deviceToken = FirebaseInstanceId.getInstance().getToken();
-                                String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance()
+                                        .getCurrentUser()).getUid();
 
                                 userDatabase.child(currentUser).child("token").setValue(deviceToken)
                                         .addOnCompleteListener(new OnCompleteListener<Void>()
@@ -125,12 +114,12 @@ public class StartActivity extends AppCompatActivity
                                         if(task.isSuccessful())
                                         {
                                             loginButton.setProgress(100);
-
-                                             verifyEmail();
+                                            verifyEmail();
                                         }
                                         else
                                         {
-                                            Log.d(TAG, "uploadToken failed " + task.getException().getMessage());
+                                            Log.d(TAG, "uploadToken failed " + Objects.requireNonNull(task
+                                                    .getException()).getMessage());
                                         }
                                     }
                                 });
@@ -141,9 +130,11 @@ public class StartActivity extends AppCompatActivity
                                         "Cannot Log in. Check your Email or password..",
                                         Toast.LENGTH_SHORT).show();
 
-                                Log.d(TAG, "signIn failed: " + task.getException().getMessage());
+                                Log.d(TAG, "signIn failed: " + Objects.requireNonNull(task.getException())
+                                        .getMessage());
 
                                 loginButton.setProgress(-1);
+                                setButton(loginButton);
                                 loginButton.setClickable(true);
                             }
                         }
@@ -214,7 +205,6 @@ public class StartActivity extends AppCompatActivity
                     setButton(registerButton);
                     registerButton.setClickable(true);
 
-                    registerButton.setClickable(true);
                 }
 
                 else
@@ -262,7 +252,8 @@ public class StartActivity extends AppCompatActivity
                                             }
                                             else
                                             {
-                                                Log.d(TAG, "registerData failed: " + task.getException().getMessage());
+                                                Log.d(TAG, "registerData failed: " + Objects.requireNonNull(task
+                                                        .getException()).getMessage());
                                             }
                                         }
                                     });
@@ -273,7 +264,8 @@ public class StartActivity extends AppCompatActivity
                                 Toast.makeText(getApplicationContext(),
                                         "Cannot Sign in. Use another email and try again..", Toast.LENGTH_LONG).show();
 
-                                Log.d(TAG, "createUser failed: " + task.getException().getMessage());
+                                Log.d(TAG, "createUser failed: " + Objects.requireNonNull(task.getException())
+                                        .getMessage());
 
                                 registerButton.setProgress(-1);
                                 setButton(registerButton);
@@ -376,22 +368,6 @@ public class StartActivity extends AppCompatActivity
                 }).show();
     }
 
-    public void showPass(CheckBox checkBox, final EditText pass, final EditText confrmPass){
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    pass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    confrmPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                }
-                else {
-                    pass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    confrmPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                }
-            }
-        });
-    }
-
     private void senVerificationEmail() {
 
         if (mAuth.getCurrentUser() != null) {
@@ -408,7 +384,7 @@ public class StartActivity extends AppCompatActivity
         }
     }
 
-    public void setButton(final ActionProcessButton button) {
+    private void setButton(final ActionProcessButton button) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

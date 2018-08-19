@@ -5,10 +5,11 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.thealteria.gabbychat.R;
+
+import java.util.Objects;
 
 public class MessagingService extends FirebaseMessagingService {
 
@@ -16,7 +17,7 @@ public class MessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        String notiTitle = remoteMessage.getNotification().getTitle();
+        String notiTitle = Objects.requireNonNull(remoteMessage.getNotification()).getTitle();
         String notiBody = remoteMessage.getNotification().getBody();
         String click_action =  remoteMessage.getNotification().getClickAction();
         String from_user_id = remoteMessage.getData().get("from_user_id");

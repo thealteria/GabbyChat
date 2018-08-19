@@ -29,9 +29,10 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.thealteria.gabbychat.Account.ChatActivity;
 import com.thealteria.gabbychat.Account.ProfileActivity;
-import com.thealteria.gabbychat.R;
 import com.thealteria.gabbychat.Model.Friends;
-import com.thealteria.gabbychat.UsersActivity;
+import com.thealteria.gabbychat.R;
+
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -69,7 +70,7 @@ public class FriendsFragment extends Fragment {
         noFriends = view.findViewById(R.id.noFriends);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        currentUserId = mAuth.getCurrentUser().getUid();
+        currentUserId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         friendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
         usersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 

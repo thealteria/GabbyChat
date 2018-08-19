@@ -17,7 +17,8 @@
         android:layout_marginEnd="17dp"
         android:src="@drawable/draw_online"
         android:id="@+id/onlineStatus"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        tools:ignore="ContentDescription" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="64dp"
@@ -42,6 +43,15 @@
         android:layout_alignStart="@+id/singleName"
         android:layout_marginTop="33dp"
         android:text="Display status.." />
+
+    <TextView
+        android:id="@+id/userMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/singleName"
+        android:layout_marginTop="33dp"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

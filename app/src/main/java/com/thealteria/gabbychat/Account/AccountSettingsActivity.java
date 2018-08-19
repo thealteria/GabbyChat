@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -36,18 +37,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 
 public class AccountSettingsActivity extends AppCompatActivity {
 
+    private static final String TAG = "AccountSettingsActivity";
+
     private DatabaseReference reference, userRef;
     private FirebaseUser currentUser;
 
     private CircleImageView mImage;
     private TextView mName, mStatus, mEmail;
-    private Button changeStatus;
 
     private ProgressDialog progressDialog;
 
@@ -65,7 +68,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         mName = findViewById(R.id.displayname);
         mStatus = findViewById(R.id.statustext);
         mEmail = findViewById(R.id.emailText);
-        changeStatus = findViewById(R.id.statusbtn);
+        Button changeStatus = findViewById(R.id.statusbtn);
 
         imageStorage = FirebaseStorage.getInstance().getReference();
 
@@ -94,7 +97,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Exception e) {
-
                         Picasso.get().load(image).placeholder(R.drawable.boy).error(R.drawable.boy).into(mImage);
                     }
                 });
@@ -186,7 +188,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
     public void setCurrentUser() {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        String uid = currentUser.getUid();
+        String uid = null;
+        if (currentUser != null) {
+            uid = currentUser.getUid();
+        }
 
         reference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
         reference.keepSynced(true);
@@ -247,7 +252,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 }
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                if (thumb_bitmap != null) {
+                    thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                }
                 thumb_byte = baos.toByteArray();
 
 
@@ -260,13 +267,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if (task.isSuccessful()) {
 
-                            final String download_url = task.getResult().getDownloadUrl().toString();
+                            final String download_url = Objects.requireNonNull(task.getResult().getDownloadUrl()).toString();
                             UploadTask uploadTask = thumb_filePath.putBytes(thumb_byte);
                             uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
-                                    final String thumb_download_url = task.getResult().getDownloadUrl().toString();
+                                    final String thumb_download_url = Objects.requireNonNull(task.getResult()
+                                            .getDownloadUrl()).toString();
 
                                     if (task.isSuccessful()) {
                                         Map updateHashMap = new HashMap();
@@ -303,6 +311,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
+                Log.d(TAG, "onActivityResult: CROP_IMAGE_ERROR: " + error.getMessage());
             }
         }
     }
