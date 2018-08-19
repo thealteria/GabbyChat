@@ -1,9 +1,13 @@
 package com.thealteria.gabbychat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +34,6 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private Toolbar mtoolbar;
     private DatabaseReference userRef, currentUserId;
     private FirebaseUser currentUser;
 
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        mtoolbar = findViewById(R.id.appbar);
+        Toolbar mtoolbar = findViewById(R.id.appbar);
         setSupportActionBar(mtoolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Gabby Chat");
 
@@ -51,6 +54,23 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.mainTabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+        }
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+        }
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+        }
 
         Objects.requireNonNull(tabLayout.getTabAt(0)).setText("Requests");
         Objects.requireNonNull(tabLayout.getTabAt(1)).setText("Chats");
@@ -123,8 +143,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        MenuItem item = menu.findItem(R.id.call);
-        item.setVisible(false);
+//        MenuItem item = menu.findItem(R.id.call);
+//        item.setVisible(false);
 
         return true;
     }
