@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(tabLayout.getTabAt(1)).setText("Chats");
         Objects.requireNonNull(tabLayout.getTabAt(2)).setText("Friends");
 
-
         currentUserId = FirebaseDatabase.getInstance().getReference().child("Users");
 
         mAuth = FirebaseAuth.getInstance();
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                     FirebaseAuth.getInstance().signOut();
                     gotoStart();
 
-                    Toast.makeText(getApplicationContext(), "Succesfully logged out!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Successfully logged out!", Toast.LENGTH_SHORT).show();
                 }
             });
 

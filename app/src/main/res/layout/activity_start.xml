@@ -157,12 +157,10 @@
                     app:pb_colorPressed="@color/colorPrimary"
                     app:pb_colorProgress="@android:color/holo_purple"
                     app:pb_colorError="@android:color/holo_red_dark"
-                    app:pb_textComplete="Logging in"
+                    app:pb_textComplete="Logged in successfully"
                     app:pb_textProgress="Please wait..."
                     app:pb_textError="Error" />
-
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -201,8 +199,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_person_black_24dp"
-                    android:digits=".-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@"
-                    android:inputType="textCapSentences"
+                    android:digits=".-_ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@"
+                    android:inputType="textCapSentences|textPersonName"
                     android:maxLines="1"
                     android:drawablePadding="12dp"
                     android:textColor="#000"
@@ -325,8 +323,8 @@
                 app:pb_colorPressed="#ffa500"
                 app:pb_colorProgress="#ffffff"
                 app:pb_colorError="@android:color/holo_red_dark"
-                app:pb_textComplete="Registering.."
-                app:pb_textProgress="Please wait..."
+                app:pb_textComplete="Registered successfully"
+                app:pb_textProgress="Registering.."
                 app:pb_textError="Please try again.." />
         </LinearLayout>
 
