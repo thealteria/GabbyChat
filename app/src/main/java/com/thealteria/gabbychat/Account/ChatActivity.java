@@ -146,6 +146,64 @@ public class ChatActivity extends AppCompatActivity {
 
         titleView.setText(mchatName);
 
+        rootRef.child("Users").child(chatUser).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                final String online = Objects.requireNonNull(dataSnapshot.child("online").getValue()).toString();
+                final String image = Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString();
+
+                Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.boy)
+                        .error(R.drawable.boy).into(profileImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get().load(image).placeholder(R.drawable.boy)
+                                .error(R.drawable.boy).into(profileImage);
+                    }
+                });
+
+                if (online.equals("true")) {
+                    lastSeen.setText("Online");
+                }
+                else {
+                    typingRef = FirebaseDatabase.getInstance().getReference().child("Chat").
+                            child(currentUserId).child(chatUser);
+                    typingRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String bool = Objects.requireNonNull(dataSnapshot.child("typing").getValue()).toString();
+
+                            if (!bool.equals("false")) {
+                                lastSeen.setText("typing..");
+                            }
+
+                            else {
+                                long lastTime = Long.parseLong(online);
+                                String lastSeenTime = GetTimeAgo.getTimeAgo(lastTime, getApplicationContext());
+
+                                lastSeen.setText("last seen " + lastSeenTime);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         chatRef = FirebaseDatabase.getInstance().getReference().child("Chat").child(chatUser).child(currentUserId);
 
         chatMsg.addTextChangedListener(new TextWatcher() {
@@ -540,64 +598,6 @@ public class ChatActivity extends AppCompatActivity {
         rootRef.child("Users").child(currentUserId).child("online").setValue("true");
 
         loadMessages();
-
-        rootRef.child("Users").child(chatUser).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                final String online = Objects.requireNonNull(dataSnapshot.child("online").getValue()).toString();
-                final String image = Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString();
-
-                Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.boy)
-                        .error(R.drawable.boy).into(profileImage, new Callback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Picasso.get().load(image).placeholder(R.drawable.boy)
-                                .error(R.drawable.boy).into(profileImage);
-                    }
-                });
-
-                if (online.equals("true")) {
-                    lastSeen.setText("Online");
-                }
-                else {
-                    typingRef = FirebaseDatabase.getInstance().getReference().child("Chat").
-                            child(currentUserId).child(chatUser);
-                    typingRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String bool = Objects.requireNonNull(dataSnapshot.child("typing").getValue()).toString();
-
-                            if (!bool.equals("false")) {
-                                lastSeen.setText("typing..");
-                            }
-
-                            else {
-                                long lastTime = Long.parseLong(online);
-                                String lastSeenTime = GetTimeAgo.getTimeAgo(lastTime, getApplicationContext());
-
-                                lastSeen.setText("last seen " + lastSeenTime);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override
