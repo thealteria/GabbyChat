@@ -1,5 +1,6 @@
 package com.thealteria.gabbychat.Utils;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.PicassoProvider;
 import com.thealteria.gabbychat.Model.Messages;
 import com.thealteria.gabbychat.R;
 
@@ -29,10 +31,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MessageViewHolder> {
 
-
     private List<Messages> mMessageList;
     private DatabaseReference mUserDatabase, userDB;
     private FirebaseAuth mAuth;
+    private Context context;
 
     public MessagesAdapter(List<Messages> mMessageList) {
 
@@ -133,6 +135,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                 viewHolder.messageTextRight.setVisibility(View.GONE);
                 viewHolder.messageImageRight.setVisibility(View.VISIBLE);
 
+                Picasso.get().setIndicatorsEnabled(false);
                 Picasso.get().load(messages.getMessage()).networkPolicy(NetworkPolicy.OFFLINE)
                         .resize(400, 400)
                         .centerCrop()

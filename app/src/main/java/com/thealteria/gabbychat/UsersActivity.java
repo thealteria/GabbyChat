@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -29,13 +30,14 @@ import com.thealteria.gabbychat.Account.AccountSettingsActivity;
 import com.thealteria.gabbychat.Account.ProfileActivity;
 import com.thealteria.gabbychat.Model.Users;
 
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UsersActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private RecyclerView recyclerView;
-    private FirebaseAuth mAuth;
     private DatabaseReference mUserDatabase;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String currentUserId;
@@ -54,7 +56,7 @@ public class UsersActivity extends AppCompatActivity {
         //mUserDatabase.keepSynced(true);
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("All Users");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("All Users");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -65,6 +67,9 @@ public class UsersActivity extends AppCompatActivity {
                 //swipeRefreshLayout.setRefreshing(true);
             }
         });
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        currentUserId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
@@ -77,14 +82,6 @@ public class UsersActivity extends AppCompatActivity {
         DividerItemDecoration mDividerItemDecoration = new
                 DividerItemDecoration(recyclerView.getContext(), linearLayout.getOrientation());
         recyclerView.addItemDecoration(mDividerItemDecoration);
-
-        mAuth = FirebaseAuth.getInstance();
-        currentUserId = mAuth.getCurrentUser().getUid();
-
-        if (mAuth.getCurrentUser() != null) {
-            userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-        }
-
     }
 
     private void refreshContent(){
@@ -202,14 +199,19 @@ public class UsersActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        currentUser = mAuth.getCurrentUser();
-//        if(currentUser != null) {
-//            userRef.child("online").setValue(ServerValue.TIMESTAMP);
-//        }
-//
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId).child("online").setValue("true");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId)
+                .child("online").setValue(ServerValue.TIMESTAMP);
+
+    }
 }

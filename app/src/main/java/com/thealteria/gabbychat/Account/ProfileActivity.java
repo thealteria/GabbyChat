@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.thealteria.gabbychat.R;
@@ -26,6 +27,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -35,14 +37,13 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView mProfilePic;
     private Button mSendRequest, mDeclineBtn;
 
-    private FirebaseAuth mAuth;
-
     private ProgressDialog progressDialog;
-    private DatabaseReference reference, friendRequestDB, friendDatabase, notificationsDatabase, mRootRef, userRef;
+    private DatabaseReference reference, friendRequestDB, friendDatabase, mRootRef;
 
     private FirebaseUser currentUser;
     private String current_state;
     private String uid;
+    private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,9 @@ public class ProfileActivity extends AppCompatActivity {
         friendRequestDB = FirebaseDatabase.getInstance().getReference().child("Friend_Request");
         friendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
         //notificationsDatabase = FirebaseDatabase.getInstance().getReference().child("notifications");
-        mAuth = FirebaseAuth.getInstance();
-        userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        currentUserId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
         mProfilePic = findViewById(R.id.profilePic);
         mName = findViewById(R.id.displayName);
@@ -67,6 +69,8 @@ public class ProfileActivity extends AppCompatActivity {
         mFriendsCount = findViewById(R.id.friends);
         mSendRequest = findViewById(R.id.sendRequest);
         mDeclineBtn = findViewById(R.id.declineRequest);
+
+
 
 
         progressDialog = new ProgressDialog(this);
@@ -358,10 +362,19 @@ public class ProfileActivity extends AppCompatActivity {
         mDeclineBtn.setEnabled(false);
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//
-//        userRef.child("online").setValue(true);
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId).child("online").setValue("true");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId)
+                .child("online").setValue(ServerValue.TIMESTAMP);
+
+    }
 }

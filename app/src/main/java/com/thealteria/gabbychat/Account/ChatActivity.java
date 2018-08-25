@@ -77,7 +77,7 @@ public class ChatActivity extends AppCompatActivity {
 
     //private SwipeRefreshLayout refreshLayout;
 
-//    private static final int TOTAL_ITEMS_TO_LOAD = 10;
+    //    private static final int TOTAL_ITEMS_TO_LOAD = 10;
 //    private int currentPage = 1, itemPos = 0;
 //    private Query messageQuery;
 //
@@ -232,13 +232,13 @@ public class ChatActivity extends AppCompatActivity {
 
                                 }
                             });
-                    }
+                }
 
                 else if (s.toString().trim().length() == 0)  {
                     chatRef.child("typing").setValue(false);
                     chatSendBtn.setEnabled(false);
                 }
-        }
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -250,10 +250,10 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent gallery = new Intent();
-        gallery.setType("image/*");
-        gallery.setAction(Intent.ACTION_GET_CONTENT);
+                gallery.setType("image/*");
+                gallery.setAction(Intent.ACTION_GET_CONTENT);
 
-        startActivityForResult(Intent.createChooser(gallery, "Select Image"), GALLERY_PICK);
+                startActivityForResult(Intent.createChooser(gallery, "Select Image"), GALLERY_PICK);
             }
         });
 
@@ -299,7 +299,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GALLERY_PICK && resultCode == RESULT_OK && data != null) {
-            
+
             progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Sending image");
             progressDialog.setMessage("Please wait while sending the image..!!");
@@ -352,7 +352,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-//        private void loadMoreMessages() {
+    //        private void loadMoreMessages() {
 //
 //        messageRef = rootRef.child("messages").child(currentUserId).child(chatUser);
 //        messageQuery = messageRef.orderByKey().endAt(lastKey).limitToLast(10);
@@ -423,17 +423,14 @@ public class ChatActivity extends AppCompatActivity {
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -597,7 +594,6 @@ public class ChatActivity extends AppCompatActivity {
         running = true;
         rootRef.child("Users").child(currentUserId).child("online").setValue("true");
 
-        loadMessages();
     }
 
     @Override

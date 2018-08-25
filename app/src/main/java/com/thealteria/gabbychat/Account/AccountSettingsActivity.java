@@ -23,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -57,6 +58,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private static final int GALLERY_PIC = 1;
 
     private StorageReference imageStorage;
+    private String currentUserId;
 
 
     @Override
@@ -68,31 +70,29 @@ public class AccountSettingsActivity extends AppCompatActivity {
         mName = findViewById(R.id.displayname);
         mStatus = findViewById(R.id.statustext);
         mEmail = findViewById(R.id.emailText);
-        Button changeStatus = findViewById(R.id.statusbtn);
 
         imageStorage = FirebaseStorage.getInstance().getReference();
 
         setCurrentUser();
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        currentUserId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String name = dataSnapshot.child("name").getValue().toString();
-                final String image = dataSnapshot.child("image").getValue().toString();
-                String status = dataSnapshot.child("status").getValue().toString();
-                String email = dataSnapshot.child("email").getValue().toString();
-                String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
+                String name = Objects.requireNonNull(dataSnapshot.child("name").getValue()).toString();
+                final String image = Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString();
+                String status = Objects.requireNonNull(dataSnapshot.child("status").getValue()).toString();
+                String email = Objects.requireNonNull(dataSnapshot.child("email").getValue()).toString();
+                String thumb_image = Objects.requireNonNull(dataSnapshot.child("thumb_image").getValue()).toString();
 
-                //get the image into ImageView
-                //Picasso.get().load(image).placeholder(R.drawable.boy).error(R.drawable.boy).into(mImage);
-
+                Picasso.get().setIndicatorsEnabled(false);
                 Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.boy).error(R.drawable.boy).into(mImage, new Callback() {
                     @Override
                     public void onSuccess() {
-
-
                     }
 
                     @Override
@@ -316,16 +316,21 @@ public class AccountSettingsActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//
-//        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//
-//        String uid = currentUser.getUid();
-//
-//        reference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
-//
-//        reference.child("online").setValue("true");
-//    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId).child("online").setValue("true");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId)
+                .child("online").setValue(ServerValue.TIMESTAMP);
+
+    }
+
 }

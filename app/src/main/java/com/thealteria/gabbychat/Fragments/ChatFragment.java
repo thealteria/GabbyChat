@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -25,18 +24,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.thealteria.gabbychat.Account.ChatActivity;
 import com.thealteria.gabbychat.Model.Conv;
-import com.thealteria.gabbychat.Model.Messages;
 import com.thealteria.gabbychat.R;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -156,22 +152,18 @@ public class ChatFragment extends Fragment {
 
                                     @Override
                                     public void onChildChanged (DataSnapshot dataSnapshot, String s) {
-                                        firebaseRecyclerAdapter.notifyDataSetChanged();
                                     }
 
                                     @Override
                                     public void onChildRemoved (DataSnapshot dataSnapshot){
-                                        firebaseRecyclerAdapter.notifyDataSetChanged();
                                     }
 
                                     @Override
                                     public void onChildMoved (DataSnapshot dataSnapshot, String s){
-                                        firebaseRecyclerAdapter.notifyDataSetChanged();
                                     }
 
                                     @Override
                                     public void onCancelled (DatabaseError databaseError){
-
                                     }
                             });
 
