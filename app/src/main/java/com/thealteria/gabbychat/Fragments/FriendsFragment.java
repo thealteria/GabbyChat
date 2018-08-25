@@ -37,6 +37,9 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendsFragment extends Fragment {
+
+    private static final String TAG = "FriendsFragment";
+
     private RecyclerView friendList;
     private TextView noFriends;
 
@@ -103,6 +106,7 @@ public class FriendsFragment extends Fragment {
                             new FirebaseRecyclerOptions.Builder<Friends>()
                                     .setQuery(friendsDatabase.child(currentUserId), Friends.class)
                                     .build();
+                    Log.d(TAG, "onDataChange: options:" + options);
 
                     firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Friends, FriendsViewHolder>(options) {
                         @Override
@@ -115,6 +119,7 @@ public class FriendsFragment extends Fragment {
                             holder.setDate("Friends since: " + friends.getDate());
 
                             userId = getRef(position).getKey();
+                            Log.d(TAG, "onBindViewHolder: userid key: " + userId);
 
                             if (userId != null) {
 

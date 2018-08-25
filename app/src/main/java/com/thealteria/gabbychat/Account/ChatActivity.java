@@ -20,8 +20,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,14 +59,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private String chatUser, currentUserId;
-    private Toolbar mChatToolbar;
+    public static String chatUser, currentUserId;
 
     private TextView lastSeen;
     private CircleImageView profileImage;
     private RecyclerView messagesList;
 
-    private DatabaseReference rootRef, typingRef, chatRef, messageRef, userDB ;
+    private DatabaseReference rootRef, typingRef, chatRef, userDB ;
     private FirebaseAuth mAuth;
 
     private ImageButton chatSendBtn;
@@ -72,6 +73,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private final List<Messages> mMessagesList = new ArrayList<>();
     private MessagesAdapter adapter;
+    public static boolean running = false;
 
     //private SwipeRefreshLayout refreshLayout;
 
@@ -92,8 +94,10 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        mChatToolbar = findViewById(R.id.chatAppbar);
+        Toolbar mChatToolbar = findViewById(R.id.chatAppbar);
         setSupportActionBar(mChatToolbar);
+
+        running = true;
 
         rootRef = FirebaseDatabase.getInstance().getReference();
         userDB = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -134,7 +138,6 @@ public class ChatActivity extends AppCompatActivity {
         //refreshLayout = findViewById(R.id.messageSwipe);
 
         LinearLayoutManager linearLayout = new LinearLayoutManager(this);
-        messagesList.setHasFixedSize(true);
         messagesList.setLayoutManager(linearLayout);
 
         messagesList.setAdapter(adapter);
@@ -185,97 +188,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        rootRef.child("Users").child(chatUser).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                final String online = Objects.requireNonNull(dataSnapshot.child("online").getValue()).toString();
-                final String image = Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString();
-
-                Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.boy)
-                        .error(R.drawable.boy).into(profileImage, new Callback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Picasso.get().load(image).placeholder(R.drawable.boy)
-                                .error(R.drawable.boy).into(profileImage);
-                    }
-                });
-
-                if (online.equals("true")) {
-                    lastSeen.setText("Online");
-                }
-                else {
-                    typingRef = FirebaseDatabase.getInstance().getReference().child("Chat").
-                            child(currentUserId).child(chatUser);
-                    typingRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String bool = Objects.requireNonNull(dataSnapshot.child("typing").getValue()).toString();
-
-                            if (!bool.equals("false")) {
-                                lastSeen.setText("typing..");
-                            }
-
-                            else {
-                                GetTimeAgo getTimeAgo = new GetTimeAgo();
-                                long lastTime = Long.parseLong(online);
-                                String lastSeenTime = GetTimeAgo.getTimeAgo(lastTime, getApplicationContext());
-
-                                lastSeen.setText("last seen " + lastSeenTime);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        rootRef.child("Chat").child(currentUserId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(chatUser)) {
-                    Map chatAddMap = new HashMap();
-                    chatAddMap.put("seen", false);
-                    chatAddMap.put("typing", false);
-                    chatAddMap.put("timestamp", ServerValue.TIMESTAMP);
-
-                    Map chatUserMap = new HashMap();
-                    chatUserMap.put("Chat/" + currentUserId + "/" + chatUser, chatAddMap);
-                    chatUserMap.put("Chat/" + chatUser + "/" + currentUserId, chatAddMap);
-
-                    rootRef.updateChildren(chatUserMap, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-
-                            if(databaseError != null) {
-                                Log.d("CHAT LOG", databaseError.getMessage());
-                            }
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
         chatAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,6 +208,32 @@ public class ChatActivity extends AppCompatActivity {
 //
 //            }
 //        });
+
+        final RelativeLayout layout = findViewById(R.id.relLayout);
+        layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
+        {
+            int previousHeight = layout.getRootView().getHeight() - layout.getHeight() - layout.getHeight();
+
+            @Override
+            public void onGlobalLayout()
+            {
+                int height = layout.getRootView().getHeight() - layout.getHeight() - messagesList.getHeight();
+
+                if(previousHeight != height)
+                {
+                    if(previousHeight > height)
+                    {
+                        previousHeight = height;
+                    }
+                    else if(previousHeight < height)
+                    {
+                        messagesList.scrollToPosition(mMessagesList.size() - 1);
+
+                        previousHeight = height;
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -318,7 +256,6 @@ public class ChatActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 Uri imageUri = result.getUri();
-
                 final String currentUserRef = "messages/" + currentUserId + "/" + chatUser;
                 final String chatUserRef = "messages/" + chatUser + "/" + currentUserId;
 
@@ -333,8 +270,7 @@ public class ChatActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
                         if (task.isSuccessful()) {
-
-                            String downloadUrl = task.getResult().getDownloadUrl().toString();
+                            String downloadUrl = Objects.requireNonNull(task.getResult().getDownloadUrl()).toString();
                             updateDatabase(downloadUrl, "image", currentUserRef, chatUserRef, pushId);
                             Toast.makeText(getApplicationContext(),
                                     "Image send successfully", Toast.LENGTH_SHORT).show();
@@ -417,32 +353,29 @@ public class ChatActivity extends AppCompatActivity {
 //    }
 
     private void loadMessages() {
-
         rootRef.child("messages").child(currentUserId).child(chatUser)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Messages messages = dataSnapshot.getValue(Messages.class);
                         mMessagesList.add(messages);
-                        adapter.notifyDataSetChanged();
-
                         messagesList.scrollToPosition(mMessagesList.size() - 1);
-
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -450,6 +383,8 @@ public class ChatActivity extends AppCompatActivity {
 
                     }
                 });
+
+
 
 
 //        messageRef = rootRef.child("messages").child(currentUserId).child(chatUser);
@@ -547,7 +482,6 @@ public class ChatActivity extends AppCompatActivity {
                     .child(currentUserId).child(chatUser).push();
 
             final String pushId = userMsgPush.getKey();
-
             updateDatabase(message, "text", currentUserRef, chatUserRef, pushId);
         }
 
@@ -555,6 +489,7 @@ public class ChatActivity extends AppCompatActivity {
 
     public void updateDatabase(String message, String type, String currentUserMsg, String chatUserMsg, String mPushId) {
         Map messageMap = new HashMap();
+
         messageMap.put("message", message);
         messageMap.put("seen", false);
         messageMap.put("type", type);
@@ -576,5 +511,103 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Map chatAddMap = new HashMap();
+        chatAddMap.put("seen", false);
+        chatAddMap.put("typing", false);
+        chatAddMap.put("timestamp", ServerValue.TIMESTAMP);
+
+        Map chatUserMap = new HashMap();
+        chatUserMap.put("Chat/" + currentUserId + "/" + chatUser, chatAddMap);
+        chatUserMap.put("Chat/" + chatUser + "/" + currentUserId, chatAddMap);
+
+        rootRef.updateChildren(chatUserMap, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                if(databaseError != null) {
+                    Log.d("CHAT LOG", databaseError.getMessage());
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        running = true;
+        rootRef.child("Users").child(currentUserId).child("online").setValue("true");
+
+        loadMessages();
+
+        rootRef.child("Users").child(chatUser).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                final String online = Objects.requireNonNull(dataSnapshot.child("online").getValue()).toString();
+                final String image = Objects.requireNonNull(dataSnapshot.child("image").getValue()).toString();
+
+                Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.boy)
+                        .error(R.drawable.boy).into(profileImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get().load(image).placeholder(R.drawable.boy)
+                                .error(R.drawable.boy).into(profileImage);
+                    }
+                });
+
+                if (online.equals("true")) {
+                    lastSeen.setText("Online");
+                }
+                else {
+                    typingRef = FirebaseDatabase.getInstance().getReference().child("Chat").
+                            child(currentUserId).child(chatUser);
+                    typingRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String bool = Objects.requireNonNull(dataSnapshot.child("typing").getValue()).toString();
+
+                            if (!bool.equals("false")) {
+                                lastSeen.setText("typing..");
+                            }
+
+                            else {
+                                long lastTime = Long.parseLong(online);
+                                String lastSeenTime = GetTimeAgo.getTimeAgo(lastTime, getApplicationContext());
+
+                                lastSeen.setText("last seen " + lastSeenTime);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        running = false;
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId)
+                .child("online").setValue(ServerValue.TIMESTAMP);
+
     }
 }

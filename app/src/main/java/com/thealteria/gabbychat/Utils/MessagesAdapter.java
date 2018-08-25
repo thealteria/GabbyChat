@@ -7,11 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -19,6 +23,9 @@ import com.thealteria.gabbychat.Model.Messages;
 import com.thealteria.gabbychat.R;
 
 import java.util.List;
+import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MessageViewHolder> {
 
@@ -47,10 +54,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     class MessageViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView messageImageRight, messageImageLeft;
-        private TextView messageTextLeft, timeText, messageTextRight;
-        private LinearLayout leftLayout, rightLayout;
+        private TextView messageTextLeft, messageTextRight, leftName;
+        private LinearLayout messageLinLayout;
+        private RelativeLayout rightMsgLayout;
 
-        private String messageTye;
         //CircleImageView profileImage;
 
         MessageViewHolder(View view) {
@@ -58,12 +65,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
             messageTextLeft = view.findViewById(R.id.messageTextLeft);
             messageTextRight = view.findViewById(R.id.messageTextRight);
-           //profileImage = view.findViewById(R.id.messageProfileLayout);
-            //timeText = view.findViewById(R.id.messageTime);
+//            profileImage = view.findViewById(R.id.messageProfileLayout);
+//            leftName = view.findViewById(R.id.leftName);
             messageImageRight = view.findViewById(R.id.messageImageRight);
             messageImageLeft = view.findViewById(R.id.messageImageLeft);
-            leftLayout = view.findViewById(R.id.leftLayout);
-            rightLayout = view.findViewById(R.id.rightLayout);
+            messageLinLayout = view.findViewById(R.id.messageLinLayout);
+            rightMsgLayout = view.findViewById(R.id.rightMsgLayout);
 
         }
     }
@@ -73,7 +80,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
         mAuth = FirebaseAuth.getInstance();
 
-        String currentUser = mAuth.getCurrentUser().getUid();
+        String currentUser = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
         final Messages messages = mMessageList.get(i);
         String from_user = messages.getFrom();
@@ -86,10 +93,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 //        mUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
-//                //String name = dataSnapshot.child("name").getValue().toString();
-//                final String image = dataSnapshot.child("thumb_image").getValue().toString();
+//                String name = Objects.requireNonNull(dataSnapshot.child("name").getValue()).toString();
+//                final String image = Objects.requireNonNull(dataSnapshot.child("thumb_image").getValue()).toString();
 //
-//                //viewHolder.displayName.setText(name);
+//                viewHolder.leftName.setText(name);
 //                Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.boy)
 //                        .error(R.drawable.boy).into(viewHolder.profileImage, new Callback() {
 //                    @Override
@@ -113,27 +120,25 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
 
         if (from_user.equals(currentUser)) {
-            viewHolder.messageTextLeft.setVisibility(View.GONE);
-            viewHolder.messageImageLeft.setVisibility(View.GONE);
-            viewHolder.leftLayout.setVisibility(View.GONE);
-            viewHolder.rightLayout.setVisibility(View.VISIBLE);
+            viewHolder.messageLinLayout.setVisibility(View.GONE);
+            viewHolder.rightMsgLayout.setVisibility(View.VISIBLE);
 
             if(messageTye.equals("text")) {
                 viewHolder.messageTextRight.setText(messages.getMessage());
-                viewHolder.messageTextRight.setVisibility(View.VISIBLE);
+                viewHolder.messageImageLeft.setVisibility(View.GONE);
                 viewHolder.messageImageRight.setVisibility(View.GONE);
             }
 
             else if (messageTye.equals("image")) {
                 viewHolder.messageTextRight.setVisibility(View.GONE);
                 viewHolder.messageImageRight.setVisibility(View.VISIBLE);
+
                 Picasso.get().load(messages.getMessage()).networkPolicy(NetworkPolicy.OFFLINE)
                         .resize(400, 400)
                         .centerCrop()
                         .into(viewHolder.messageImageRight, new Callback() {
                             @Override
                             public void onSuccess() {
-
                             }
 
                             @Override
@@ -145,14 +150,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             }
         }
         else {
-            viewHolder.messageTextRight.setVisibility(View.GONE);
-            viewHolder.messageImageRight.setVisibility(View.GONE);
-            viewHolder.rightLayout.setVisibility(View.GONE);
-            viewHolder.leftLayout.setVisibility(View.VISIBLE);
+            viewHolder.rightMsgLayout.setVisibility(View.GONE);
+            viewHolder.messageLinLayout.setVisibility(View.VISIBLE);
 
             if (messageTye.equals("text")) {
                 viewHolder.messageTextLeft.setText(messages.getMessage());
-                //viewHolder.messageImageLeft.setVisibility(View.GONE);
+                viewHolder.messageImageLeft.setVisibility(View.GONE);
+                viewHolder.messageImageRight.setVisibility(View.GONE);
             }
 
             else if (messageTye.equals("image")) {
@@ -182,36 +186,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     public int getItemCount() {
         return mMessageList.size();
     }
-
-    /* public void setMessage(TextView goneText, TextView showText, final ImageView goneImage, final ImageView showImage) {
-
-        goneText.setVisibility(View.GONE);
-        goneImage.setVisibility(View.GONE);
-
-        if(messageTye.equals("text")) {
-            showText.setText(messages.getMessage());
-            showImage.setVisibility(View.GONE);
-        }
-
-        else if (messageTye.equals("image")) {
-            showText.setVisibility(View.INVISIBLE);
-            Picasso.get().load(messages.getMessage()).networkPolicy(NetworkPolicy.OFFLINE)
-                    .resize(400, 400)
-                    .centerCrop()
-                    .into(showImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            Picasso.get().load(messages.getMessage()).resize(400, 400)
-                                    .centerCrop().into(showImage);
-                        }
-                    });
-        }
-    } */
 }
 
 

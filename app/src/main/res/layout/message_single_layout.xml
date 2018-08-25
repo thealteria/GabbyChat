@@ -8,57 +8,90 @@
     android:paddingStart="10dp"
     android:paddingEnd="10dp">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/messageLinLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/messageRelLayout">
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="5dp">
 
         <!--<de.hdodenhof.circleimageview.CircleImageView-->
-        <!--android:id="@+id/messageProfileLayout"-->
-        <!--android:layout_width="36dp"-->
-        <!--android:layout_height="36dp"-->
-        <!--android:src="@drawable/boy" -->
-            <!--android:visibility="gone"/>-->
+            <!--android:id="@+id/messageProfileLayout"-->
+            <!--android:layout_width="36dp"-->
+            <!--android:layout_height="36dp"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_marginEnd="4dp"-->
+            <!--android:src="@drawable/boy"-->
+            <!--android:visibility="visible" />-->
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/leftLayout"
-            android:background="@drawable/message_text_back"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginEnd="80dp"
-            android:padding="3dp"
-            android:elevation="3dp">
+            android:layout_marginTop="12dp">
 
-            <TextView
-                android:id="@+id/messageTextLeft"
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_marginStart="5dp"-->
+                <!--android:id="@+id/leftName"-->
+                <!--android:text="Name"-->
+                <!--android:textSize="15sp" />-->
+
+            <LinearLayout
+                android:id="@+id/leftLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginStart="5dp"
                 android:background="@drawable/message_text_back"
-                android:text="Message"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:padding="5dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"/>
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="3dp">
 
-            <ImageView
-                android:id="@+id/messageImageLeft"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="ContentDescription"
-                android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/messageTextLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/message_text_back"
+                    android:padding="5dp"
+                    android:text="Message"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/messageImageLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription" />
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="00:00" -->
+                    <!--android:layout_marginStart="70dp"/>-->
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/rightMsgLayout">
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="22sp"-->
+            <!--android:layout_marginEnd="-70dp"-->
+            <!--android:layout_toStartOf="@+id/rightLayout"-->
+            <!--android:text="00:00" />-->
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -93,16 +126,6 @@
                 android:visibility="gone"/>
 
         </LinearLayout>
-
     </RelativeLayout>
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:id="@+id/messageTime"-->
-    <!--android:layout_marginStart="10dp"-->
-    <!--android:layout_toEndOf="@+id/messageTextLayout"-->
-    <!--android:text="00:00" />-->
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.thealteria.gabbychat.Fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -24,22 +25,28 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.thealteria.gabbychat.Account.ChatActivity;
 import com.thealteria.gabbychat.Model.Conv;
+import com.thealteria.gabbychat.Model.Messages;
 import com.thealteria.gabbychat.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatFragment extends Fragment {
 
+    private static final String TAG = "ChatFragment";
 
-    private DatabaseReference chatDatabase, messageDB, userDB;
+    private DatabaseReference chatDatabase, messageDB, userDB, rootRef;
     private FirebaseAuth mAuth;
     private String currentUserId;
     private TextView noChat;
@@ -67,21 +74,23 @@ public class ChatFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
+        rootRef = FirebaseDatabase.getInstance().getReference();
         chatDatabase = FirebaseDatabase.getInstance().getReference().child("Chat");
-        currentUserId = mAuth.getCurrentUser().getUid();
-        chatDatabase.child(currentUserId).keepSynced(true);
+        chatDatabase.keepSynced(true);
+        currentUserId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
         userDB = FirebaseDatabase.getInstance().getReference().child("Users");
         messageDB = FirebaseDatabase.getInstance().getReference().child("messages").child(currentUserId);
 
         chatList.setHasFixedSize(true);
         LinearLayoutManager linearLayout = new LinearLayoutManager(getContext());
+        linearLayout.setReverseLayout(true);
+        linearLayout.setStackFromEnd(true);
         chatList.setLayoutManager(linearLayout);
 
         DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(chatList.getContext(),
                 linearLayout.getOrientation());
         chatList.addItemDecoration(mDividerItemDecoration);
-
 
         return view;
 
@@ -103,6 +112,7 @@ public class ChatFragment extends Fragment {
                             new FirebaseRecyclerOptions.Builder<Conv>()
                                     .setQuery(chatDatabase.child(currentUserId).orderByChild("timestamp"), Conv.class)
                                     .build();
+                    Log.d(TAG, "onDataChange: options: " + options);
 
                     firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Conv, ConvViewHolder>(options) {
                         @Override
@@ -110,53 +120,68 @@ public class ChatFragment extends Fragment {
                                                         int position, @NonNull final Conv conv) {
 
                             final String userId = getRef(position).getKey();
+                            Log.d(TAG, "onBindViewHolder: userid: " + userId);
+
+                            DatabaseReference userMsgPush = rootRef.child("messages")
+                                    .child(currentUserId).child(userId).push();
+
                             Query lastMessage = messageDB.child(userId).limitToLast(1);
+
+                            Log.d(TAG, "order: " + lastMessage);
 
                             lastMessage.addChildEventListener(new ChildEventListener() {
                                 @Override
                                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                    String type = Objects.requireNonNull(dataSnapshot.child("type").getValue()).toString();
-                                    String data = Objects.requireNonNull(dataSnapshot.child("message").getValue()).toString();
 
-                                    switch (type) {
-                                        case "text":
-                                            holder.setMessage(data, conv.isSeen());
-                                            break;
-                                        case "image":
-                                            holder.setMessage("image", conv.isSeen());
-                                            break;
-                                        default:
-                                            holder.setMessage(" ", conv.isSeen());
-                                            break;
+                                        String type = Objects.requireNonNull(dataSnapshot.child("type")
+                                                .getValue()).toString();
+                                        String data = Objects.requireNonNull(dataSnapshot.child("message")
+                                                .getValue()).toString();
+                                    String time = Objects.requireNonNull(dataSnapshot.child("time").getValue()).toString();
+
+                                    Log.d(TAG, "onChildAdded: msg: " + data + "\n" + time);
+
+                                        switch (type) {
+                                            case "text":
+                                                holder.setMessage(data, conv.isSeen());
+                                                break;
+                                            case "image":
+                                                holder.setMessage("image", conv.isSeen());
+                                                break;
+                                            default:
+                                                holder.setMessage(" ", conv.isSeen());
+                                                break;
                                     }
-                                }
+                                    }
 
-                                @Override
-                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                                    @Override
+                                    public void onChildChanged (DataSnapshot dataSnapshot, String s) {
+                                        firebaseRecyclerAdapter.notifyDataSetChanged();
+                                    }
 
-                                }
+                                    @Override
+                                    public void onChildRemoved (DataSnapshot dataSnapshot){
+                                        firebaseRecyclerAdapter.notifyDataSetChanged();
+                                    }
 
-                                @Override
-                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                                    @Override
+                                    public void onChildMoved (DataSnapshot dataSnapshot, String s){
+                                        firebaseRecyclerAdapter.notifyDataSetChanged();
+                                    }
 
-                                }
+                                    @Override
+                                    public void onCancelled (DatabaseError databaseError){
 
-                                @Override
-                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
+                                    }
                             });
 
                             userDB.child(userId).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    final String name = dataSnapshot.child("name").getValue().toString();
-                                    final String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
+                                    final String name = Objects.requireNonNull(dataSnapshot
+                                            .child("name").getValue()).toString();
+                                    final String thumb_image = Objects.requireNonNull(dataSnapshot
+                                            .child("thumb_image").getValue()).toString();
 
 //                                    if (dataSnapshot.hasChild("online")) {
 //                                        String userOnline = dataSnapshot.child("online").getValue().toString();
@@ -273,5 +298,28 @@ public class ChatFragment extends Fragment {
 //                onlineImage.setImageResource(R.drawable.draw_offline);
 //            }
 //        }
+    }
+
+    public void convertDate(String d) {
+
+        //You are getting server date as argument, parse your server response and then pass date to this method
+
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat sdfAmerica = new SimpleDateFormat("hh:mm:ss");
+
+        String actualTime = sdfAmerica.format(d);
+        TimeZone tzInIndia = TimeZone.getTimeZone("IST");
+        sdfAmerica.setTimeZone(tzInIndia);
+
+        String convertedTime = sdfAmerica.format(d);
+
+        System.out.println("actual : " + actualTime + "  converted " + convertedTime);
+        Log.d(TAG, "convertDate: " + "actual : " + actualTime + "  converted " + convertedTime);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        firebaseRecyclerAdapter.stopListening();
     }
 }

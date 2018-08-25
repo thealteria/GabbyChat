@@ -67,7 +67,6 @@ public class RequestFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_request, container, false);
 
         requestList = view.findViewById(R.id.request_list);
@@ -125,7 +124,8 @@ public class RequestFragment extends Fragment {
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                                         final String name = Objects.requireNonNull(dataSnapshot.child("name")
                                                                 .getValue()).toString();
-                                                        final String thumb_image = Objects.requireNonNull(dataSnapshot.child("thumb_image").
+                                                        final String thumb_image = Objects
+                                                                .requireNonNull(dataSnapshot.child("thumb_image").
                                                                 getValue()).toString();
 
                                                         holder.setName(name);
@@ -134,8 +134,10 @@ public class RequestFragment extends Fragment {
                                                         holder.view.setOnClickListener(new View.OnClickListener() {
                                                             @Override
                                                             public void onClick(View v) {
-                                                                CharSequence options[] = new CharSequence[]{"Open Profile", "Send message"};
-                                                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                                                CharSequence options[] = new CharSequence[]
+                                                                        {"Open Profile", "Send message"};
+                                                                AlertDialog.Builder builder = new
+                                                                        AlertDialog.Builder(getContext());
 
                                                                 builder.setTitle("Select Options");
                                                                 builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -143,16 +145,19 @@ public class RequestFragment extends Fragment {
                                                                     public void onClick(DialogInterface dialog, int which) {
 
                                                                         if (which == 0) {
-                                                                            Intent intent = new Intent(getContext(), ProfileActivity.class);
+                                                                            Intent intent = new Intent(getContext(),
+                                                                                    ProfileActivity.class);
                                                                             intent.putExtra("user_id", uid);
                                                                             startActivity(intent);
                                                                         }
 
                                                                         if (which == 1) {
-                                                                            Intent chatIntent = new Intent(getContext(), ChatActivity.class);
+                                                                            Intent chatIntent = new Intent(getContext(),
+                                                                                    ChatActivity.class);
                                                                             chatIntent.putExtra("user_id", uid);
                                                                             chatIntent.putExtra("chat_name", name);
-                                                                            chatIntent.putExtra("chat_image", thumb_image);
+                                                                            chatIntent.putExtra("chat_image",
+                                                                                    thumb_image);
                                                                             startActivity(chatIntent);
                                                                         }
                                                                     }
@@ -180,7 +185,8 @@ public class RequestFragment extends Fragment {
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                                         final String name = Objects.requireNonNull(dataSnapshot
                                                                 .child("name").getValue()).toString();
-                                                        final String thumb_image = Objects.requireNonNull(dataSnapshot.child("thumb_image").
+                                                        final String thumb_image = Objects.requireNonNull(dataSnapshot
+                                                                .child("thumb_image").
                                                                 getValue()).toString();
 
                                                         holder.setName(name);
@@ -228,8 +234,8 @@ public class RequestFragment extends Fragment {
                                 public void onClick(View v) {
 
                                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                                    alertDialog.setTitle("Decline Request");
-                                    alertDialog.setMessage("Are you sure you want to decline the Request?");
+                                    alertDialog.setTitle("Accept Request");
+                                    alertDialog.setMessage("Are you sure you want to accept the Request?");
 
                                     alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog,int which) {

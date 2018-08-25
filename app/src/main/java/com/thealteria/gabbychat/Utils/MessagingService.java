@@ -33,7 +33,6 @@ public class MessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(click_action);
         intent.putExtra( "user_id", from_user_id);
 
-
         PendingIntent pendingIntent = PendingIntent
                 .getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
