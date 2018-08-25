@@ -11,7 +11,8 @@
     <LinearLayout
         android:id="@+id/messageLinLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp">
 
         <!--<de.hdodenhof.circleimageview.CircleImageView-->
             <!--android:id="@+id/messageProfileLayout"-->
@@ -25,8 +26,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="12dp">
+            android:orientation="vertical">
 
             <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->
@@ -41,8 +41,7 @@
                 android:id="@+id/leftLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="2dp"
                 android:background="@drawable/message_text_back"
                 android:elevation="3dp"
                 android:orientation="vertical"
